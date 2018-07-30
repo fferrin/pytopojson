@@ -71,14 +71,11 @@ class Extract(object):
             self.index += 1
             i += 1
 
-        arc = {
-            0: self.index - n,
-            1: self.index - 1
-        }
+        arc = [self.index - n, self.index - 1]
         append_to.append(arc)
 
         # TODO: Original project returns arc
-        return [arc[0], arc[1]]
+        return arc
 
     def extract_line(self, line):
         return self.extract(line, self.lines)
