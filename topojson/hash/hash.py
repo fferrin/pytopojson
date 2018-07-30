@@ -3,76 +3,146 @@ import math
 
 class HashMap(object):
     def __init__(self, size, hash, equal, key_type=list, key_empty=None, value_type=list):
-        self.key_store = [None] * (1 << max(4, int(math.ceil(math.log(size) / math.log(2)))))
-        self.val_store = [None] * size
-        self.mask = size - 1
+        self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
+        self.hash = hash
+        self.equal = equal
+        self.key_empty = key_empty
+        self.key_store = [None] * self.size
+        self.val_store = [None] * self.size
+        self.mask = self.size - 1
 
         for i in range(size):
             self.key_store[i] = key_empty
 
         self.value = {
-            'set': None
+            'set': self.set,
+            'maybeSet': self.maybe_set,
+            'get': self.get,
+            'keys': self.keys
         }
 
-        def set(key, value):
-            index = hash(key) & self.mask
-            match_key = self.key_store[index]
-            collisions = 0
+    def set(self, key, value):
+        index = self.hash(key) & self.mask
+        match_key = self.key_store[index]
+        collisions = 0
 
-            while match_key != key_empty:
-                if match_key == key:
-                    pass
-                    # return self.val_store[index] = value
+        while match_key != self.key_empty:
+            if self.equal(match_key, key):
+                self.val_store[index] = value
+                return self.val_store[index]
+            if self.size <= collisions:
+                raise ValueError('Full HashMap')
+
+            collisions += 1
+            index = (index + 1) & self.mask
+            match_key = self.key_store[index]
+
+        self.key_store[index] = key
+        self.val_store[index] = value
+        return value
+
+    def maybe_set(self, key, value):
+        index = self.hash(key) & self.mask
+        match_key = self.key_store[index]
+        collisions = 1
+
+        while match_key != self.key_empty:
+            if self.equal(match_key, key):
+                return self.val_store[index]
+            if self.size <= collisions:
+                raise ValueError('Full HashMap')
+
+            collisions += 1
+            index = (index + 1) & self.mask
+            match_key = self.key_store[index]
+
+        self.key_store[index] = key
+        self.val_store[index] = value
+        return value
+
+    def get(self, key, missing_value=None):
+        index = self.hash(key) & self.mask
+        match_key = self.key_store[index]
+        collisions = 1
+
+        while match_key != self.key_empty:
+            if self.equal(match_key, key):
+                return self.val_store[index]
+            if self.size <= collisions:
+                break
+
+            collisions += 1
+            index = (index + 1) & self.mask
+            match_key = self.key_store[index]
+
+        return missing_value
+
+    def keys(self):
+        keys = list()
+        i = 0
+        n = len(self.key_store)
+
+        # TODO: Check for k in self.key_store
+        while i < n:
+            match_key = self.key_store[i]
+            if match_key != self.key_empty:
+                keys.append(match_key)
+
+        return keys
 
 
 class HashSet(object):
     def __init__(self, size, hash, equal, type=list, empty=None):
-        self.size = size
+        self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
+        self.hash = hash
+        self.equal = equal
         self.empty = empty
-        self.store = [None] * (1 << max(4, int(math.ceil(math.log(size) / math.log(2)))))
-        self.mask = size - 1
+        self.store = [None] * self.size
+        self.mask = self.size -1
 
         for i in range(size):
             self.store[i] = empty
 
-        values = {
+        self.values = {
             'add': self.add,
             'has': self.has,
             'values': self.values
         }
 
     def add(self, value):
-        index = hash(value) & self.mask
+        index = self.hash(value) & self.mask
         match = self.store[index]
         collisions = 0
 
         while match != self.empty:
-            if match == value:
+            if self.equal(match, value):
                 return True
 
             collisions += 1
             if self.size <= collisions:
-                raise Exception("Full hashset")
+                raise ValueError("Full hashset")
 
-            # match = self.store[index = (index + 1) & mask]
+            index = (index + 1) & self.mask
+            match = self.store[index]
 
         self.store[index] = value
         return True
 
     def has(self, value):
-        index = hash(value) & self.mask
+        index = self.hash(value) & self.mask
         match = self.store[index]
         collisions = 0
 
         while match != self.empty:
-            if match == value:
+            if self.equal(match, value):
                 return True
 
             collisions += 1
             if self.size <= collisions:
                 break
 
-            # match = self.store[index = (index + 1) & mask]
+            index = (index + 1) & self.mask
+            match = self.store[index]
 
         return False
 
