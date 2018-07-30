@@ -1,6 +1,6 @@
 import unittest
 
-from topojson import bounds, extract, geometry, prequantize
+from topojson import bounds, delta, extract, geometry, prequantize
 
 
 class BoundsTestCase(unittest.TestCase):
@@ -24,6 +24,46 @@ class BoundsTestCase(unittest.TestCase):
         }
 
         self.assertListEqual(bounds.BoundingBox(foo).value, [0, 0, 1, 2])
+
+
+class DeltaTestCase(unittest.TestCase):
+
+    def test_delta_converts_arcs_to_delta_encoding(self):
+        d = delta.Delta([
+            [[0, 0], [9999, 0], [0, 9999], [0, 0]]
+        ])
+
+        self.assertListEqual(
+            d.arcs,
+            [
+                [[0, 0], [9999, 0], [-9999, 9999], [0, -9999]]
+            ]
+        )
+
+    def test_delta_skips_coincident_points(self):
+        d = delta.Delta([
+            [[0, 0], [9999, 0], [9999, 0], [0, 9999], [0, 0]]
+        ])
+
+        self.assertListEqual(
+            d.arcs,
+            [
+                [[0, 0], [9999, 0], [-9999, 9999], [0, -9999]]
+            ]
+        )
+
+    def test_delta_preserves_at_least_two_positions(self):
+        d = delta.Delta([
+            [[12345, 12345], [12345, 12345], [12345, 12345], [12345, 12345]]
+        ])
+
+        self.assertListEqual(
+            d.arcs,
+            [
+                [[12345, 12345], [0, 0]]
+            ]
+        )
+
 
 
 class ExtractTestCase(unittest.TestCase):

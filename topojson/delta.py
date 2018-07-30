@@ -28,8 +28,7 @@ class Delta(object):
                 arc[k] = [0, 0]
                 k += 1
 
-            # TODO: Ver esto
-            # arc.length = k
+            arc = arc[:k]
+            i += 1
 
-        # TODO: Arcs o arc?
-        return arcs
+        self.arcs = [arc]
