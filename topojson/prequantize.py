@@ -1,10 +1,7 @@
 
 class Prequantize(object):
-    def __init__(self, objects, bbox, n):
-        self.x_0, self.y_0, self.x_1, self.y_1 = bbox
-        self.k_x = int((n - 1) / (self.x_1 - self.x_0)) if self.x_0 < self.x_1 else 1
-        self.k_y = int((n - 1) / (self.y_1 - self.y_0)) if self.y_0 < self.y_1 else 1
 
+    def __init__(self, objects, bbox, n):
         self.quantize_geometry_type = {
             'GeometryCollection': self._geometry_collection_call,
             'Point': self._point_call,
@@ -14,6 +11,10 @@ class Prequantize(object):
             'Polygon': self._polygon_call,
             'MultiPolygon': self._multi_point_call
         }
+
+        self.x_0, self.y_0, self.x_1, self.y_1 = bbox
+        self.k_x = int((n - 1) / (self.x_1 - self.x_0)) if self.x_0 < self.x_1 else 1
+        self.k_y = int((n - 1) / (self.y_1 - self.y_0)) if self.y_0 < self.y_1 else 1
 
         for k in objects:
             self.quantize_geometry(objects[k])
@@ -48,7 +49,30 @@ class Prequantize(object):
         return [int(round((inp[0] - self.x_0) * self.k_x)), int(round((inp[1] - self.y_0) * self.k_y))]
 
     def quantize_points(self, inp, m):
-        return 4
+        i = j = 0
+        n = len(inp)
+        output = [None] * n
+        p = [None, None]
+
+        while i < n:
+            p_i = inp[i]
+            x = int(round((p_i[0] - self.x_0) * self.k_x))
+            y = int(round((p_i[1] - self.y_0) * self.k_y))
+
+            if p != [x, y]:
+                p = [x, y]
+                output[j] = p
+                j += 1
+
+            i += 1
+
+        output = output[:j]
+
+        while j < m:
+            output.append([output[0][0], output[0][1]])
+            j = len(output)
+
+        return output
 
     def quantize_line(self, inp):
         return self.quantize_points(inp, 2)
@@ -61,4 +85,4 @@ class Prequantize(object):
 
     def quantize_geometry(self, o):
         if o and o['type'] in self.quantize_geometry_type:
-            self.quantize_geometry_type[o['type']]
+            self.quantize_geometry_type[o['type']](o)

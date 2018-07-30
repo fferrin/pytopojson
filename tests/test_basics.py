@@ -587,8 +587,8 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 1, 1], 1e4)
-        self.assertListEqual(quantize.value['foo']['arcs'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
+        prequantize.Prequantize(objects, [0, 0, 1, 1], 1e4)
+        self.assertListEqual(objects['foo']['arcs'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
 
     def test_prequantize_observes_the_quantization_parameter(self):
         objects = {
@@ -598,8 +598,8 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 1, 1], 10)
-        self.assertListEqual(quantize.value['foo']['arcs'], [[0, 0], [9, 0], [0, 9], [0, 0]])
+        prequantize.Prequantize(objects, [0, 0, 1, 1], 10)
+        self.assertListEqual(objects['foo']['arcs'], [[0, 0], [9, 0], [0, 9], [0, 0]])
 
     def test_prequantize_observes_the_bounding_box(self):
         objects = {
@@ -609,19 +609,19 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [-1, -1, 2, 2], 10)
-        self.assertListEqual(quantize.value['foo']['arcs'], [[3, 3], [6, 3], [3, 6], [3, 3]])
+        prequantize.Prequantize(objects, [-1, -1, 2, 2], 10)
+        self.assertListEqual(objects['foo']['arcs'], [[3, 3], [6, 3], [3, 6], [3, 3]])
 
     def test_prequantize_applies_to_points_as_well_as_arcs(self):
         objects = {
             'foo': {
                 'type': 'MultiPoint',
-                'arcs': [[0, 0], [1, 0], [0, 1], [0, 0]]
+                'coordinates': [[0, 0], [1, 0], [0, 1], [0, 0]]
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 1, 1], 1e4)
-        self.assertListEqual(quantize.value['foo']['coordinates'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
+        prequantize.Prequantize(objects, [0, 0, 1, 1], 1e4)
+        self.assertListEqual(objects['foo']['coordinates'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
 
     def test_prequantize_skips_coincident_points_in_line(self):
         objects = {
@@ -631,8 +631,8 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(quantize.value['foo']['arcs'], [[0, 0], [1, 1], [2, 2]])
+        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.assertListEqual(objects['foo']['arcs'], [[0, 0], [1, 1], [2, 2]])
 
     def test_prequantize_skips_coincident_points_in_polygon(self):
         objects = {
@@ -642,19 +642,19 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(quantize.value['foo']['arcs'], [[[0, 0], [1, 1], [2, 2], [0, 0]]])
+        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.assertListEqual(objects['foo']['arcs'], [[[0, 0], [1, 1], [2, 2], [0, 0]]])
 
     def test_prequantize_does_not_skip_coincident_points_in_point(self):
         objects = {
             'foo': {
                 'type': 'MultiPoint',
-                'arcs': [[0, 0], [0.9, 0.9], [1.1, 1.1], [2, 2], [0, 0]]
+                'coordinates': [[0, 0], [0.9, 0.9], [1.1, 1.1], [2, 2], [0, 0]]
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(quantize.value['foo']['coordinates'], [[0, 0], [1, 1], [1, 1], [2, 2], [0, 0]])
+        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.assertListEqual(objects['foo']['coordinates'], [[0, 0], [1, 1], [1, 1], [2, 2], [0, 0]])
 
     def test_prequantize_includes_closing_point_in_degenerate_lines(self):
         objects = {
@@ -664,8 +664,8 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(quantize.value['foo']['arcs'], [[1, 1], [1, 1]])
+        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.assertListEqual(objects['foo']['arcs'], [[1, 1], [1, 1]])
 
     def test_prequantize_includes_closing_point_in_degenerate_polygons(self):
         objects = {
@@ -675,8 +675,8 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        quantize = prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(quantize.value['foo']['arcs'], [[[1, 1], [1, 1], [1, 1], [1, 1]]])
+        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.assertListEqual(objects['foo']['arcs'], [[[1, 1], [1, 1], [1, 1], [1, 1]]])
 
 
 if __name__ == '__main__':
