@@ -100,10 +100,10 @@ class HashSet(object):
         self.store = [None] * self.size
         self.mask = self.size - 1
 
-        for i in range(size):
+        for i in range(self.size):
             self.store[i] = empty
 
-        self.values = {
+        self.value = {
             'add': self.add,
             'has': self.has,
             'values': self.values

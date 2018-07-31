@@ -21,6 +21,7 @@ def bin_to_uint(value):
 
 
 def hash(point):
+    point = point.items()[0] if type(point) == dict else point
     bins = [to_bin(point[0]), to_bin(point[0])]
     uints = [bin_to_uint(bins[0][:32]), bin_to_uint(bins[0][32:]),
              bin_to_uint(bins[1][:32]), bin_to_uint(bins[1][32:])]

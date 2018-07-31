@@ -1,5 +1,6 @@
 
-from hash.hash import HashMap
+from commons import set_in_list
+from hash.hash import HashMap, HashSet
 from hash.point import equal as equal_point
 from hash.point import hash as hash_point
 
@@ -46,22 +47,24 @@ class Join(object):
             line_start += 1
             next_index = self.indexes[line_start]
             self.junction_count += 1
-            self.junction_by_index[current_index] = 1
+            set_in_list(self.junction_by_index, current_index, 1)
             line_start += 1
 
             while line_start <= line_end:
                 previous_index = current_index
                 current_index = next_index
                 next_index = self.indexes[line_start]
-                self.sequence(i, previous_index, current_index, next_index)
+                self.sequence(previous_index, current_index, next_index)
+                line_start += 1
 
         self.visited_by_index = self.left_by_index = self.right_by_index = None
         self.junction_by_point = HashSet(self.junction_count * 1.4, hash_point, equal_point)
 
+        len_junction_by_index = len(self.junction_by_index)
         for i in range(len(self.coordinates)):
             j = self.indexes[i]
-            if self.junction_by_point[j]:
-                self.junction_by_point.append(self.coordinates[j])
+            if j < len_junction_by_index and self.junction_by_index[j]:
+                self.junction_by_point.add(self.coordinates[j])
 
         self.value = self.junction_by_point
 
@@ -89,7 +92,7 @@ class Join(object):
         indexes = [None] * len(self.coordinates)
 
         for i in range(len(self.coordinates)):
-            indexes = index_by_point.maybe_set(i, i)
+            indexes[i] = index_by_point.maybe_set(i, i)
 
         return indexes
 
