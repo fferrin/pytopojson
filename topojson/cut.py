@@ -1,4 +1,6 @@
 
+from topojson.join import Join
+
 
 class Cut(object):
     """
@@ -8,7 +10,8 @@ class Cut(object):
     """
 
     def __init__(self, topology):
-        self.junctions = Join(topology).value
+        j = Join(topology)
+        self.junctions = j.value
         self.coordinates = topology['coordinates']
         self.lines = topology['lines']
         self.rings = topology['rings']

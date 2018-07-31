@@ -1,6 +1,6 @@
 import unittest
 
-from topojson import bounds, delta, extract, geometry, prequantize
+from topojson import bounds, cut, delta, extract, geometry, prequantize
 
 
 class BoundsTestCase(unittest.TestCase):
@@ -24,6 +24,41 @@ class BoundsTestCase(unittest.TestCase):
         }
 
         self.assertListEqual(bounds.BoundingBox(foo).value, [0, 0, 1, 2])
+
+
+class CutTestCase(unittest.TestCase):
+
+    def test_cut_exact_duplicate_lines_ABC_and_ABC_have_no_cuts(self):
+        e = extract.Extract({
+            'abc': {
+                'type': 'LineString',
+                'arcs': [[0, 0], [1, 0], [2, 0]]
+            },
+            'abc2': {
+                'type': 'LineString',
+                'arcs': [[0, 0], [1, 0], [2, 0]]
+            }
+        })
+
+        c = cut.Cut(e.value)
+
+        self.assertDictEqual({
+            'abc': {
+                'type': 'LineString',
+                'arcs': {
+                    0: 0,
+                    1: 2
+                }
+            },
+            'abc2': {
+                'type': 'LineString',
+                'arcs': {
+                    0: 3,
+                    1: 5
+                }
+            }
+        },
+        c.value)
 
 
 class DeltaTestCase(unittest.TestCase):

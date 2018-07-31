@@ -11,7 +11,7 @@ class HashMap(object):
         self.val_store = [None] * self.size
         self.mask = self.size - 1
 
-        for i in range(size):
+        for i in range(self.size):
             self.key_store[i] = key_empty
 
         self.value = {
@@ -98,7 +98,7 @@ class HashSet(object):
         self.equal = equal
         self.empty = empty
         self.store = [None] * self.size
-        self.mask = self.size -1
+        self.mask = self.size - 1
 
         for i in range(size):
             self.store[i] = empty

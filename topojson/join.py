@@ -1,6 +1,8 @@
 
+from hash.hash import HashMap
 from hash.point import equal as equal_point
 from hash.point import hash as hash_point
+
 
 # Computes the bounding box of the specified hash of GeoJSON objects.
 class Join(object):
@@ -15,7 +17,7 @@ class Join(object):
     both cases the adjacent point pairs are {A,C}. However, if there is an
     additional arc ABD, then {A,D} != {A,C}, and thus B becomes a junction.
 
-    For a closed ring ABCA, the first point A’s adjacent points are the second
+    For a closed ring ABCA, the first point A's adjacent points are the second
     and last point {B,C}. For a line, the first and last point are always
     considered junctions, even if the line is closed; this ensures that a closed
     line is never rotated.
@@ -25,10 +27,10 @@ class Join(object):
         self.coordinates = topology['coordinates']
         self.lines = topology['lines']
         self.rings = topology['rings']
-        self.indexes = self.index
-        self.visited_by_index = list()
-        self.left_by_index = list()
-        self.right_by_index = list()
+        self.indexes = self.index()
+        self.visited_by_index = [None] * len(self.coordinates)
+        self.left_by_index = [None] * len(self.coordinates)
+        self.right_by_index = [None] * len(self.coordinates)
         self.junction_by_index = list()
         self.junction_count = 0
 
@@ -36,7 +38,7 @@ class Join(object):
             self.visited_by_index[i] = self.left_by_index[i] = self.right_by_index[i] = -1
 
         for i in range(len(self.lines)):
-            line = lines[i]
+            line = self.lines[i]
             line_start = line[0]
             line_end = line[1]
 

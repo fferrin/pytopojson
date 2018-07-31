@@ -21,7 +21,7 @@ def bin_to_uint(value):
 
 
 def hash(point):
-    bins = [to_bin(point.keys()[0]), to_bin(point.values()[0])]
+    bins = [to_bin(point[0]), to_bin(point[0])]
     uints = [bin_to_uint(bins[0][:32]), bin_to_uint(bins[0][32:]),
              bin_to_uint(bins[1][:32]), bin_to_uint(bins[1][32:])]
     h = uints[0] ^ uints[1]
@@ -30,4 +30,4 @@ def hash(point):
 
 
 def equal(p_1, p_2):
-    return p_1.keys()[0] == p_2.keys()[0] and p_1.values()[0] == p_2.values()[0]
+    return p_1[0] == p_2[0] and p_1[0] == p_2[0]
