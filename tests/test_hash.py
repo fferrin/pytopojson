@@ -9,6 +9,10 @@ def equal(a, b):
     return a == b
 
 
+def hash(o):
+    return o.hash
+
+
 class HashMapTestCase(unittest.TestCase):
 
     def test_hashmap_can_get_an_object_by_key(self):
