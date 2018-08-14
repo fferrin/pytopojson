@@ -30,10 +30,12 @@ class HashMap(object):
             if self.equal(match_key, key):
                 self.val_store[index] = value
                 return self.val_store[index]
+
+            collisions += 1
+
             if self.size <= collisions:
                 raise ValueError('Full HashMap')
 
-            collisions += 1
             index = (index + 1) & self.mask
             match_key = self.key_store[index]
 

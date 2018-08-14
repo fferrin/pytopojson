@@ -37,8 +37,8 @@ class Cut(object):
             ring = r
             ring_start = ring[0]
             ring_mid = ring_start + 1
-            ring_end = rind[1]
-            ring_fixed = self.junctions.has[self.coordinates[ring_mid]]
+            ring_end = ring[1]
+            ring_fixed = self.junctions.has(self.coordinates[ring_mid])
 
             while ring_mid < ring_end:
                 if self.junctions.has(self.coordinates[ring_mid]):
@@ -56,6 +56,8 @@ class Cut(object):
                         self.coordinates[ring_end] = self.coordinates[ring_start]
                         ring_fixed = True
                         ring_mid = ring_start
+
+                ring_mid += 1
 
         self.value = topology
 

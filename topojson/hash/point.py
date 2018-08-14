@@ -4,7 +4,7 @@ import struct
 
 def to_bin(value):
     if type(value) == str:
-        b = ''.join(map(bin, bytearray(value))).replace('0b', '')[:64]
+        b = ''.join(map(bin, bytearray(value))).replace('b', '')[:64]
         return b if len(b) == 64 else b.zfill(64)
     else:
         return float_to_bin(value)
@@ -14,29 +14,6 @@ def float_to_bin(value):
     """ Convert float to 64-bit binary string. """
     [d] = struct.unpack(">Q", struct.pack(">d", value))
     return '{:064b}'.format(d)
-
-
-def int_to_bin(value):
-    return '{:064b}'.format(value)
-    # """ Convert float to 64-bit binary string. """
-    # [d] = struct.unpack(">Q", struct.pack(">d", value))
-    # return '{:064b}'.format(d)
-
-
-def string_to_bin(value):
-    return '{:064b}'.format(value)
-    # """ Convert float to 64-bit binary string. """
-    # [d] = struct.unpack(">Q", struct.pack(">d", value))
-    # return '{:064b}'.format(d)
-
-
-def to_bin(value):
-    if type(value) == str:
-        return string_to_bin(value)
-    elif type(value) == float:
-        return float_to_bin(value)
-    elif type(value) == int:
-        return int_to_bin(value)
 
 
 def bin_to_uint(value):

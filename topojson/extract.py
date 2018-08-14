@@ -47,16 +47,19 @@ class Extract(object):
         }
 
     def _line_string_call(self, o):
-        o['arcs'] = self.extract_line(o['arcs'])
+        o['arcs'] = self.extract_line(o['arcs']).values()
 
     def _multi_line_string_call(self, o):
-        o['arcs'] = map(self.extract_line, o['arcs'])
+        o['arcs'] = [r.values() for r in map(self.extract_line, o['arcs'])]
+        # o['arcs'] = map(self.extract_line, o['arcs'])
 
     def _polygon_call(self, o):
-        o['arcs'] = map(self.extract_ring, o['arcs'])
+        o['arcs'] = [r.values() for r in map(self.extract_ring, o['arcs'])]
+        # o['arcs'] = map(self.extract_ring, o['arcs'])
 
     def _multi_polygon_call(self, o):
-        o['arcs'] = map(self.extract_multi_ring, o['arcs'])
+        o['arcs'] = [r.values() for r in map(self.extract_multi_ring, o['arcs'])]
+        # o['arcs'] = map(self.extract_multi_ring, o['arcs'])
 
     def extract_geometry(self, geometry):
         if geometry and geometry['type'] in self.extract_geometry_type:
@@ -75,7 +78,8 @@ class Extract(object):
             0: self.index - n,
             1: self.index - 1
         }
-        append_to.append(arc)
+
+        append_to.append(arc.values())
 
         # TODO: Original project returns arc
         return arc
@@ -87,4 +91,4 @@ class Extract(object):
         return self.extract(ring, self.rings)
 
     def extract_multi_ring(self, rings):
-        return map(self.extract_ring, rings)
+        return [r.values() for r in map(self.extract_ring, rings)]
