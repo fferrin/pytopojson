@@ -6,7 +6,7 @@ from topojson.hash.point import hash as h, equal as e
 
 
 def equal(a, b):
-    return a == b
+    return a is b
 
 
 def hash(o):
