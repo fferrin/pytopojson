@@ -21,7 +21,10 @@ class Extract(object):
     lines or rings.
     """
 
-    def __init__(self, objects):
+    def __init__(self):
+        pass
+
+    def __call__(self, objects, *args, **kwargs):
         self.extract_geometry_type = {
             'GeometryCollection': lambda o: map(self.extract_geometry, o['geometries']),
             'LineString': self._line_string_call,
@@ -38,7 +41,7 @@ class Extract(object):
         for k in objects:
             self.extract_geometry(objects[k])
 
-        self.value = {
+        return {
             'type': 'Topology',
             'coordinates': self.coordinates,
             'lines': self.lines,

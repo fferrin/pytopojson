@@ -2,10 +2,11 @@
 
 # Computes the bounding box of the specified hash of GeoJSON objects.
 class BoundingBox(object):
-    def __init__(self, geometry):
+    def __init__(self):
         self.x_0 = self.y_0 = float('inf')
         self.x_1 = self.y_1 = -float('inf')
 
+    def __call__(self, geometry, *args, **kwargs):
         self.bound_geometry_type = {
             'GeometryCollection': lambda o: map(self.bound_geometry, o['geometries']),
             'Point': lambda o: self.bound_point(o['cordinates']),
@@ -20,6 +21,7 @@ class BoundingBox(object):
             self.bound_geometry(geometry[k])
 
         self.value = [self.x_0, self.y_0, self.x_1, self.y_1] if self.x_0 <= self.x_1 and self.y_0 <= self.y_1 else None
+        return self.value
 
     def bound_geometry(self, geometry):
         if geometry and geometry['type'] in self.bound_geometry_type:

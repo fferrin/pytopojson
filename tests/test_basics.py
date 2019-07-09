@@ -4,6 +4,8 @@ from topojson import bounds, cut, delta, extract, geometry, join, prequantize
 
 
 class BoundsTestCase(unittest.TestCase):
+    def setUp(self):
+        self.bbox = bounds.BoundingBox()
 
     def test_bounds_computes_bounding_box(self):
         foo = {
@@ -13,7 +15,7 @@ class BoundsTestCase(unittest.TestCase):
             }
         }
 
-        self.assertListEqual(bounds.BoundingBox(foo).value, [0, 0, 1, 2])
+        self.assertListEqual(self.bbox(foo), [0, 0, 1, 2])
 
     def test_bounds_considers_points_as_well_as_arcs(self):
         foo = {
@@ -23,7 +25,7 @@ class BoundsTestCase(unittest.TestCase):
             }
         }
 
-        self.assertListEqual(bounds.BoundingBox(foo).value, [0, 0, 1, 2])
+        self.assertListEqual(self.bbox(foo), [0, 0, 1, 2])
 
 
 class CutTestCase(unittest.TestCase):
