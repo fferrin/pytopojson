@@ -1,9 +1,14 @@
 
 class Geometry(object):
-    def __init__(self, inputs):
+    def __init__(self):
+        pass
+
+    def __call__(self, inputs, *args, **kwargs):
         self.output = dict()
         for k, v in inputs.iteritems():
             self.output[k] = self.geomify_object(v)
+
+        return self.output
 
     def geomify_object(self, input):
         if input is None:
