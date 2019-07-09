@@ -1,7 +1,10 @@
 
 class Prequantize(object):
 
-    def __init__(self, objects, bbox, n):
+    def __init__(self):
+        pass
+
+    def __call__(self, objects, bbox, n, *args, **kwargs):
         self.quantize_geometry_type = {
             'GeometryCollection': self._geometry_collection_call,
             'Point': self._point_call,
@@ -19,7 +22,7 @@ class Prequantize(object):
         for k in objects:
             self.quantize_geometry(objects[k])
 
-        self.value = {
+        return {
             'scale': [1 / self.k_x, 1 / self.k_y],
             'translate': [self.x_0, self.y_0],
         }
