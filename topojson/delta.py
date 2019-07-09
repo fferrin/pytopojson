@@ -1,7 +1,10 @@
 
 
 class Delta(object):
-    def __init__(self, arcs):
+    def __init__(self):
+        pass
+
+    def __call__(self, arcs, *args, **kwargs):
         i = 0
         n = len(arcs)
 
@@ -31,4 +34,4 @@ class Delta(object):
             arc = arc[:k]
             i += 1
 
-        self.arcs = [arc]
+        return [arc]
