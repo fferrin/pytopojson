@@ -1,6 +1,7 @@
 
 from hash.point import hash as hash_point
 from hash.point import equal as equal_point
+from topojson.hash.hash import HashMap
 
 
 class Cut(object):
@@ -9,6 +10,9 @@ class Cut(object):
     """
 
     def __init__(self, topology):
+        pass
+
+    def __call__(self, topology, *args, **kwargs):
         self.coordinates = topology['coordinates']
         self.lines = topology['lines']
         self.rings = topology['rings']
@@ -36,7 +40,7 @@ class Cut(object):
             line = l
 
             while line:
-                dedup_line(l)
+                self.dedup_line(l)
                 line = line['next']
 
         for r in self.rings:

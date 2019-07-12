@@ -30,8 +30,12 @@ class BoundsTestCase(unittest.TestCase):
 
 class CutTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.cut = cut.Cut()
+        self.extract = extract.Extract()
+
     def test_cut_exact_duplicate_lines_abc_and_abc_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -42,7 +46,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -59,10 +63,10 @@ class CutTestCase(unittest.TestCase):
                     1: 5
                 }
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_reversed_duplicate_lines_abc_and_cba_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -73,7 +77,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -90,10 +94,10 @@ class CutTestCase(unittest.TestCase):
                     1: 5
                 }
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_exact_duplicate_rings_abca_and_abca_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
@@ -104,7 +108,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -115,10 +119,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_reversed_duplicate_rings_acba_and_abca_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
@@ -129,7 +133,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -140,10 +144,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_rotated_duplicate_rings_bcab_and_abca_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
@@ -154,7 +158,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -165,10 +169,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_ring_abca_and_line_abca_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcaLine': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [0, 0]]
@@ -179,7 +183,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abcaLine': {
@@ -190,10 +194,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_ring_bcab_and_line_abca_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcaLine': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [0, 0]]
@@ -204,7 +208,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abcaLine': {
@@ -215,10 +219,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_ring_abca_and_line_bcab_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'bcabLine': {
                 'type': 'LineString',
                 'arcs': [[1, 0], [2, 0], [0, 0], [1, 0]]
@@ -229,7 +233,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'bcabLine': {
@@ -240,10 +244,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_an_old_arc_abc_extends_a_new_arc_ab_abc_is_cut_into_ab_bc(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -254,7 +258,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -265,10 +269,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_reversed_old_arc_cba_extends_a_new_arc_ab_cba_is_cut_into_cb_ba(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -279,7 +283,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'cba': {
@@ -290,10 +294,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_arc_ade_shares_its_start_with_an_old_arc_abc_there_are_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'ade': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -304,7 +308,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'ade': {
@@ -315,61 +319,61 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 5}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_ring_aba_has_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'aba': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 0]]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'aba': {
                 'type': 'Polygon',
                 'arcs': [{0: 0, 1: 2}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_ring_aa_has_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'aa': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [0, 0]]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'aa': {
                 'type': 'Polygon',
                 'arcs': [{0: 0, 1: 1}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_degenerate_ring_a_has_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'a': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0]]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'a': {
                 'type': 'Polygon',
                 'arcs': [{0: 0, 1: 0}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_dec_shares_its_end_with_an_old_line_abc_there_are_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -380,7 +384,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -391,10 +395,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 5}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_abc_extends_an_old_line_ab_abc_is_cut_into_ab_bc(self):
-        e = extract.Extract({
+        e = self.extract({
             'ab': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0]]
@@ -405,7 +409,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'ab': {
@@ -416,10 +420,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 2, 1: 3, 'next': {0: 3, 1: 4}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_abc_extends_a_reversed_old_line_ba_abc_is_cut_into_ab_bc(self):
-        e = extract.Extract({
+        e = self.extract({
             'ba': {
                 'type': 'LineString',
                 'arcs': [[1, 0], [0, 0]]
@@ -430,7 +434,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'ba': {
@@ -441,10 +445,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 2, 1: 3, 'next': {0: 3, 1: 4}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_starts_bc_in_the_middle_of_an_old_line_abc_abc_is_cut_into_ab_bc(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -455,7 +459,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -466,10 +470,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_bc_starts_in_the_middle_of_a_reversed_old_line_cba_cba_is_cut_into_cb_ba(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -480,7 +484,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'cba': {
@@ -491,10 +495,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_abd_deviates_from_an_old_line_abc_abd_is_cut_into_ab_bd_and_abc_is_cut_into_ab_bc(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -505,7 +509,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -516,10 +520,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4, 'next': {0: 4, 1: 5}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_abd_deviates_from_a_reversed_old_line_cba_cba_is_cut_into_cb_ba_and_abd_is_cut_into_ab_bd(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -530,7 +534,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'cba': {
@@ -541,10 +545,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4, 'next': {0: 4, 1: 5}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_dbc_merges_into_an_old_line_abc_dbc_is_cut_into_db_bc_and_abc_is_cut_into_ab_bc(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -555,7 +559,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -566,10 +570,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4, 'next': {0: 4, 1: 5}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_dbc_merges_into_a_reversed_old_line_cba_dbc_is_cut_into_db_bc_and_cba_is_cut_into_cb_ba(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -580,7 +584,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'cba': {
@@ -591,10 +595,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4, 'next': {0: 4, 1: 5}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_dbe_shares_a_single_midpoint_with_an_old_line_abc_dbe_is_cut_into_db_be_and_abc_is_cut_into_ab_bc(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -605,7 +609,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abc': {
@@ -616,10 +620,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 3, 1: 4, 'next': {0: 4, 1: 5}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_abde_skips_a_point_with_an_old_line_abcde_abde_is_cut_into_ab_bd_de_and_abcde_is_cut_into_ab_bcd_de(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcde': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]
@@ -630,7 +634,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abcde': {
@@ -641,10 +645,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 5, 1: 6, 'next': {0: 6, 1: 7, 'next': {0: 7, 1: 8}}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_new_line_abde_skips_a_point_with_a_reversed_old_line_edcba_abde_is_cut_into_ab_bd_de_and_edcba_is_cut_into_ed_dcb_ba(self):
-        e = extract.Extract({
+        e = self.extract({
             'edcba': {
                 'type': 'LineString',
                 'arcs': [[4, 0], [3, 0], [2, 0], [1, 0], [0, 0]]
@@ -655,7 +659,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'edcba': {
@@ -666,61 +670,61 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 5, 1: 6, 'next': {0: 6, 1: 7, 'next': {0: 7, 1: 8}}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_line_abcdbe_self_intersects_with_its_middle_it_is_not_cut(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcdbe': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [3, 0], [1, 0], [4, 0]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abcdbe': {
                 'type': 'LineString',
                 'arcs': {0: 0, 1: 5}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_line_abacd_self_intersects_with_its_start_it_is_cut_into_aba_acd(self):
-        e = extract.Extract({
+        e = self.extract({
             'abacd': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [0, 0], [3, 0], [4, 0]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abacd': {
                 'type': 'LineString',
                 'arcs': {0: 0, 1: 2, 'next': {0: 2, 1: 4}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_line_abdcd_self_intersects_with_its_end_it_is_cut_into_abd_dcd(self):
-        e = extract.Extract({
+        e = self.extract({
             'abdcd': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [0, 0], [3, 0], [4, 0]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abdcd': {
                 'type': 'LineString',
                 'arcs': {0: 0, 1: 2, 'next': {0: 2, 1: 4}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_an_old_line_abcdbe_self_intersects_and_shares_a_point_b_abcdbe_is_cut_into_ab_bcdb_be_and_fbg_is_cut_into_fb_bg(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcdbe': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [3, 0], [1, 0], [4, 0]]
@@ -731,7 +735,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abcdbe': {
@@ -742,44 +746,44 @@ class CutTestCase(unittest.TestCase):
                 'type': 'LineString',
                 'arcs': {0: 6, 1: 7, 'next': {0: 7, 1: 8}}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_line_abca_is_closed_there_are_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [0, 1], [0, 0]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
                 'type': 'LineString',
                 'arcs': {0: 0, 1: 3}
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_when_a_ring_abca_is_closed_there_are_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [{0: 0, 1: 3}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_exact_duplicate_rings_abca_and_abca_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -790,7 +794,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -801,10 +805,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_reversed_duplicate_rings_abca_and_acba_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -815,7 +819,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -826,10 +830,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_coincident_rings_abca_and_bcab_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -840,7 +844,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -851,10 +855,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_coincident_rings_abca_and_bacb_have_no_cuts(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -865,7 +869,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -876,10 +880,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
     def test_cut_coincident_rings_abca_and_dbed_have_no_cuts_but_are_rotated_to_share_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -890,7 +894,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -901,13 +905,13 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
         self.assertListEqual(c.value['topology']['coordinates'].slice(0, 4), [[1, 0], [0, 1], [0, 0], [1, 0]])
         self.assertListEqual(c.value['topology']['coordinates'].slice(4, 8), [[1, 0], [2, 2], [2, 1], [1, 0]])
 
     def test_cut_overlapping_rings_abcda_and_befcb_are_cut_into_bc_cdab_and_befc_cb(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcda': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]] # rotated to BCDAB, cut BC-CDAB
@@ -918,7 +922,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = cut.Cut(e.value)
+        c = self.cut(e)
 
         self.assertDictEqual({
             'abcda': {
@@ -929,42 +933,45 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 5, 1: 8, 'next': {0: 8, 1: 9}}]
             }
-        }, c.value['objects'])
+        }, c['objects'])
 
 
 class DeltaTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.delta = delta.Delta()
+
     def test_delta_converts_arcs_to_delta_encoding(self):
-        d = delta.Delta([
+        d = self.delta([
             [[0, 0], [9999, 0], [0, 9999], [0, 0]]
         ])
 
         self.assertListEqual(
-            d.arcs,
+            d,
             [
                 [[0, 0], [9999, 0], [-9999, 9999], [0, -9999]]
             ]
         )
 
     def test_delta_skips_coincident_points(self):
-        d = delta.Delta([
+        d = self.delta([
             [[0, 0], [9999, 0], [9999, 0], [0, 9999], [0, 0]]
         ])
 
         self.assertListEqual(
-            d.arcs,
+            d,
             [
                 [[0, 0], [9999, 0], [-9999, 9999], [0, -9999]]
             ]
         )
 
     def test_delta_preserves_at_least_two_positions(self):
-        d = delta.Delta([
+        d = self.delta([
             [[12345, 12345], [12345, 12345], [12345, 12345], [12345, 12345]]
         ])
 
         self.assertListEqual(
-            d.arcs,
+            d,
             [
                 [[12345, 12345], [0, 0]]
             ]
@@ -973,8 +980,11 @@ class DeltaTestCase(unittest.TestCase):
 
 class ExtractTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.extract = extract.Extract()
+
     def test_extract_copies_coordinates_sequentially_into_a_buffer(self):
-        topology = extract.Extract({
+        topology = self.extract({
             'foo': {
                 'type': "LineString",
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -985,10 +995,10 @@ class ExtractTestCase(unittest.TestCase):
             }
         })
 
-        self.assertListEqual(topology.value['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0], [1, 0], [2, 0]])
+        self.assertListEqual(topology['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0], [1, 0], [2, 0]])
 
     def test_extract_does_not_copy_point_geometries_into_the_coordinate_buffer(self):
-        topology = extract.Extract({
+        topology = self.extract({
             'foo': {
                 'type': 'Point',
                 'arcs': [0, 0]
@@ -999,22 +1009,22 @@ class ExtractTestCase(unittest.TestCase):
             }
         })
 
-        self.assertListEqual(topology.value['coordinates'], [])
-        self.assertListEqual(topology.value['objects']['foo']['arcs'], [0, 0])
-        self.assertListEqual(topology.value['objects']['bar']['arcs'], [[0, 0], [1, 0], [2, 0]])
+        self.assertListEqual(topology['coordinates'], [])
+        self.assertListEqual(topology['objects']['foo']['arcs'], [0, 0])
+        self.assertListEqual(topology['objects']['bar']['arcs'], [[0, 0], [1, 0], [2, 0]])
 
     def test_extract_includes_closing_coordinates_in_polygons(self):
-        topology = extract.Extract({
+        topology = self.extract({
             'foo': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
             }
         })
 
-        self.assertListEqual(topology.value['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0]])
+        self.assertListEqual(topology['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0]])
 
     def test_extract_represents_lines_as_contiguous_slices_of_the_coordinate_buffer(self):
-        topology = extract.Extract({
+        topology = self.extract({
             'foo': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1026,7 +1036,7 @@ class ExtractTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            topology.value['objects'],
+            topology['objects'],
             {
                 'foo': {
                     'type': 'LineString',
@@ -1040,7 +1050,7 @@ class ExtractTestCase(unittest.TestCase):
         )
 
     def test_extract_represents_rings_as_contiguous_slices_of_the_coordinate_buffer(self):
-        topology = extract.Extract({
+        topology = self.extract({
             'foo': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
@@ -1052,7 +1062,7 @@ class ExtractTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            topology.value['objects'],
+            topology['objects'],
             {
                 'foo': {
                     'type': 'Polygon',
@@ -1066,7 +1076,7 @@ class ExtractTestCase(unittest.TestCase):
         )
 
     def test_extract_exposes_the_constructed_lines_and_rings_in_the_order_of_construction(self):
-        topology = extract.Extract({
+        topology = self.extract({
             'line': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1081,11 +1091,11 @@ class ExtractTestCase(unittest.TestCase):
             }
         })
 
-        self.assertListEqual(topology.value['lines'], [[0, 2], [3, 5]])
-        self.assertListEqual(topology.value['rings'], [[6, 9]])
+        self.assertListEqual(topology['lines'], [[0, 2], [3, 5]])
+        self.assertListEqual(topology['rings'], [[6, 9]])
 
     def test_extract_supports_nested_geometry_collections(self):
-        topology = extract.Extract({
+        topology = self.extract({
             'foo': {
                 'type': 'GeometryCollection',
                 'geometries': [{
@@ -1099,7 +1109,7 @@ class ExtractTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            topology.value['objects']['foo'],
+            topology['objects']['foo'],
             {
                 'type': 'GeometryCollection',
                 'geometries': [{
@@ -1115,9 +1125,11 @@ class ExtractTestCase(unittest.TestCase):
 
 
 class GeometryTestCase(unittest.TestCase):
+    def setUp(self):
+        self.geometry = geometry.Geometry()
 
     def test_geometry_replaces_LineString_Feature_with_LineString_Geometry(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'Feature',
                 'geometry': {
@@ -1128,7 +1140,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'LineString',
@@ -1138,7 +1150,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_replaces_GeometryCollection_Feature_with_GeometryCollection(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'Feature',
                 'geometry': {
@@ -1152,7 +1164,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'GeometryCollection',
@@ -1165,7 +1177,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_replaces_FeatureCollection_with_GeometryCollection(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'FeatureCollection',
                 'features': [{
@@ -1179,7 +1191,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'GeometryCollection',
@@ -1192,7 +1204,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_replaces_Feature_with_null_Geometry_with_null_type_Geometry(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'Feature',
                 'geometry': None
@@ -1200,7 +1212,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': None
@@ -1209,12 +1221,12 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_replaces_top_level_null_Geometry_with_null_type_Geometry(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': None
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': None
@@ -1223,7 +1235,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_replaces_null_Geometry_in_GeometryCollection_with_null_type_Geometry(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'GeometryCollection',
                 'geometries': [None]
@@ -1231,7 +1243,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'GeometryCollection',
@@ -1243,7 +1255,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_preserves_id(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'id': 'foo',
                 'type': 'Feature',
@@ -1255,7 +1267,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'id': 'foo',
@@ -1266,7 +1278,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_preserves_properties_if_non_empty(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'properties': {
                     'foo': 42
@@ -1280,7 +1292,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'properties': {
@@ -1306,12 +1318,12 @@ class GeometryTestCase(unittest.TestCase):
             }
         }
 
-        geom = geometry.Geometry(input)
+        geom = self.geometry(input)
 
-        self.assertDictEqual(input['foo']['properties'], geom.output['foo']['properties'])
+        self.assertDictEqual(input['foo']['properties'], geom['foo']['properties'])
 
     def test_geometry_deletes_empty_properties(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'properties': {},
                 'type': 'Feature',
@@ -1323,7 +1335,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'LineString',
@@ -1333,7 +1345,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_convert_singular_multipoints_to_points(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'MultiPoint',
                 'coordinates': [[0, 0]]
@@ -1341,7 +1353,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'MultiPoint',
@@ -1351,7 +1363,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_convert_empty_multipoints_to_null(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'MultiPoint',
                 'coordinates': []
@@ -1359,7 +1371,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'MultiPoint',
@@ -1369,7 +1381,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_convert_singular_multilines_to_line(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'MultiLineString',
                 'coordinates': [[[0, 0], [0, 1]]]
@@ -1377,7 +1389,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'MultiLineString',
@@ -1387,7 +1399,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_convert_empty_lines_to_null(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'LineString',
                 'coordinates': []
@@ -1395,7 +1407,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'LineString',
@@ -1405,7 +1417,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_convert_empty_multilines_to_null(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'MultiLineString',
                 'coordinates': []
@@ -1417,7 +1429,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'MultiLineString',
@@ -1431,7 +1443,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_strip_empty_lines_in_multilines(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'MultiLineString',
                 'coordinates': [[[0, 0], [1, 0], [1, 1], [0, 0]], [], [[0, 0], [1, 0]]]
@@ -1439,7 +1451,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'MultiLineString',
@@ -1449,7 +1461,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_convert_empty_polygons_to_null(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'Polygon',
                 'coordinates': []
@@ -1461,7 +1473,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'Polygon',
@@ -1475,7 +1487,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_strip_empty_polygons_in_multipolygons(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'MultiPolygon',
                 'coordinates': [[[[0, 0], [1, 0], [1, 1], [0, 0]], []], [], [[]]]
@@ -1483,7 +1495,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'MultiPolygon',
@@ -1493,7 +1505,7 @@ class GeometryTestCase(unittest.TestCase):
         )
 
     def test_geometry_does_not_convert_singular_multipolygons_to_polygons(self):
-        geom = geometry.Geometry({
+        geom = self.geometry({
             'foo': {
                 'type': 'MultiPolygon',
                 'coordinates': [[[[0, 0], [0, 1], [1, 0], [0, 0]]]]
@@ -1501,7 +1513,7 @@ class GeometryTestCase(unittest.TestCase):
         })
 
         self.assertDictEqual(
-            geom.output,
+            geom,
             {
                 'foo': {
                     'type': 'MultiPolygon',
@@ -1513,8 +1525,12 @@ class GeometryTestCase(unittest.TestCase):
 
 class JoinTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.extract = extract.Extract()
+        self.join = join.Join()
+
     def test_join_the_returned_hashmap_has_true_for_junction_points(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -1524,13 +1540,13 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertEquals(junctions.value.has([2, 0]), True)
-        self.assertEquals(junctions.value.has([0, 0]), True)
+        self.assertEquals(junctions.has([2, 0]), True)
+        self.assertEquals(junctions.has([0, 0]), True)
 
     def test_join_the_returned_hashmap_undefined_for_non_junction_points(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -1540,12 +1556,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertEquals(junctions.value.has([1, 0]), False)
+        self.assertEquals(junctions.has([1, 0]), False)
 
     def test_join_exact_duplicate_lines_abc_and_abc_have_junctions_at_their_end_points(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1555,12 +1571,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0]])
 
     def test_join_reversed_duplicate_lines_abc_and_cba_have_junctions_at_their_end_points(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1570,12 +1586,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[2, 0], [1, 0], [0, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0]])
 
     def test_join_exact_duplicate_rings_abca_and_abca_have_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
@@ -1585,12 +1601,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_reversed_duplicate_rings_abca_and_abca_have_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
@@ -1600,12 +1616,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[0, 0], [2, 0], [1, 0], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_rotated_duplicate_rings_abca_and_abca_have_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
@@ -1615,12 +1631,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[1, 0], [2, 0], [0, 0], [1, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_ring_abca_and_abca_have_a_junction_at_a(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcaLine': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [0, 0]]
@@ -1630,12 +1646,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0]])
 
     def test_join_ring_bcab_and_abca_have_a_junction_at_a(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcaLine': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [0, 0]]
@@ -1645,12 +1661,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[1, 0], [2, 0], [0, 0], [1, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0]])
 
     def test_join_ring_abca_and_bcab_have_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'bcabLine': {
                 'type': 'LineString',
                 'arcs': [[1, 0], [2, 0], [0, 0], [1, 0]]
@@ -1660,12 +1676,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[0, 0], [1, 0], [2, 0], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[1, 0]])
+        self.assertItemsEqual(junctions.values(), [[1, 0]])
 
     def test_join_when_an_old_arc_abc_extends_a_new_arc_ab_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1675,12 +1691,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_reversed_old_arc_cba_extends_a_new_arc_ab_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -1690,12 +1706,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_join_when_a_new_arc_ade_shares_its_start_with_an_old_arc_abc_there_is_a_junction_at_a(self):
-        e = extract.Extract({
+        e = self.extract({
             'ade': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1705,45 +1721,45 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 1], [2, 1]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [2, 0], [2, 1]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [2, 1]])
 
     def test_join_ring_aba_has_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'aba': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_ring_aa_has_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'aa': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_degenerate_ring_a_has_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'a': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_when_a_new_line_dec_shares_its_end_with_an_old_line_abc_there_is_a_junction_at_c(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1753,12 +1769,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 1], [1, 1], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [2, 0], [0, 1]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [0, 1]])
 
     def test_join_when_a_new_line_abc_extends_an_old_line_ab_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'ab': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0]]
@@ -1768,12 +1784,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_abc_extends_a_reversed_old_line_ba_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'ba': {
                 'type': 'LineString',
                 'arcs': [[1, 0], [0, 0]]
@@ -1783,12 +1799,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_starts_bc_in_the_middle_of_an_old_line_abc_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1798,12 +1814,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[1, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_bc_starts_in_the_middle_of_a_reversed_old_line_cba_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -1813,12 +1829,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[1, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_abd_deviates_from_an_old_line_abc_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1828,12 +1844,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [3, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_abd_deviates_from_a_reversed_old_line_cba_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -1843,12 +1859,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [3, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
+        self.assertItemsEqual(junctions.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_dbc_merges_into_an_old_line_abc_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1858,12 +1874,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[3, 0], [1, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_dbc_merges_into_a_reversed_old_line_cba_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'cba': {
                 'type': 'LineString',
                 'arcs': [[2, 0], [1, 0], [0, 0]]
@@ -1873,12 +1889,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[3, 0], [1, 0], [2, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
+        self.assertItemsEqual(junctions.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_dbe_shares_a_single_midpoint_with_an_old_line_abc_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abc': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0]]
@@ -1888,12 +1904,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 1], [1, 0], [2, 1]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [2, 0], [2, 1], [1, 0], [0, 1]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [2, 1], [1, 0], [0, 1]])
 
-    def test_join_when_a_new_line_dbe_shares_a_single_midpoint_with_an_old_line_abc_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+    def test_VER_join_when_a_new_line_dbe_shares_a_single_midpoint_with_an_old_line_abc_there_is_a_junction_at_b(self):
+        e = self.extract({
             'abcde': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]
@@ -1903,12 +1919,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [3, 0], [4, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [4, 0], [1, 0], [3, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_abde_skips_a_point_with_a_reversed_old_line_edcba_there_is_a_junction_at_b_and_d(self):
-        e = extract.Extract({
+        e = self.extract({
             'edcba': {
                 'type': 'LineString',
                 'arcs': [[4, 0], [3, 0], [2, 0], [1, 0], [0, 0]]
@@ -1918,45 +1934,45 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [3, 0], [4, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[4, 0], [0, 0], [1, 0], [3, 0]])
+        self.assertItemsEqual(junctions.values(), [[4, 0], [0, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_line_abcdbe_self_intersects_with_its_middle_there_are_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcdbe': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [3, 0], [1, 0], [4, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [4, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0]])
 
     def test_join_when_a_line_abacd_self_intersects_with_its_start_there_are_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'abacd': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [0, 0], [3, 0], [4, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [4, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0]])
 
     def test_join_when_a_line_abcdbd_self_intersects_with_its_end_there_are_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcdbd': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [4, 0], [3, 0], [4, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [4, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0]])
 
     def test_join_when_an_old_line_abcdbe_self_intersects_and_shares_a_point_b_there_is_a_junction_at_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abcdbe': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [2, 0], [3, 0], [1, 0], [4, 0]]
@@ -1966,34 +1982,34 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 1], [1, 0], [2, 1]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0], [4, 0], [1, 0], [0, 1], [2, 1]])
+        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0], [1, 0], [0, 1], [2, 1]])
 
     def test_join_when_a_line_abca_is_closed_there_is_a_junction_at_a(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'LineString',
                 'arcs': [[0, 0], [1, 0], [0, 1], [0, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[0, 0]])
+        self.assertItemsEqual(junctions.values(), [[0, 0]])
 
     def test_join_when_a_ring_abca_is_closed_there_are_no_junctions(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_exact_duplicate_rings_abca_and_abca_share_the_arc_abca(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -2003,12 +2019,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[0, 0], [1, 0], [0, 1], [0, 0]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_reversed_duplicate_rings_abca_and_acba_share_the_arc_abca(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -2018,12 +2034,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[0, 0], [0, 1], [1, 0], [0, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_coincident_rings_abca_and_bcab_share_the_arc_bcab(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -2033,12 +2049,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[1, 0], [0, 1], [0, 0], [1, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_coincident_rings_abca_and_bacb_share_the_arc_bcab(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -2048,12 +2064,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[1, 0], [0, 0], [0, 1], [1, 0]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [])
+        self.assertItemsEqual(junctions.values(), [])
 
     def test_join_coincident_rings_abca_and_dbed_share_the_point_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -2063,12 +2079,12 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[[2, 1], [1, 0], [2, 2], [2, 1]]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[1, 0]])
+        self.assertItemsEqual(junctions.values(), [[1, 0]])
 
     def test_join_coincident_ring_abca_and_line_dbe_share_the_point_b(self):
-        e = extract.Extract({
+        e = self.extract({
             'abca': {
                 'type': 'Polygon',
                 'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
@@ -2078,18 +2094,21 @@ class JoinTestCase(unittest.TestCase):
                 'arcs': [[2, 1], [1, 0], [2, 2]]
             }
         })
-        junctions = join.Join(e.value)
+        junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.value.values(), [[2, 1], [2, 2], [1, 0]])
+        self.assertItemsEqual(junctions.values(), [[2, 1], [2, 2], [1, 0]])
 
 
 class PrequantizeTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.prequantize = prequantize.Prequantize()
+
     def test_prequantize_returns_the_quantization_transform(self):
-        quantize = prequantize.Prequantize({}, [0, 0, 1, 1], 1e4)
+        quantize = self.prequantize({}, [0, 0, 1, 1], 1e4)
 
         self.assertDictEqual(
-            quantize.value,
+            quantize,
             {
                 'scale': [1 / 9999, 1 / 9999],
                 'translate': [0, 0]
@@ -2104,7 +2123,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 1, 1], 1e4)
+        self.prequantize(objects, [0, 0, 1, 1], 1e4)
         self.assertListEqual(objects['foo']['arcs'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
 
     def test_prequantize_observes_the_quantization_parameter(self):
@@ -2115,7 +2134,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 1, 1], 10)
+        self.prequantize(objects, [0, 0, 1, 1], 10)
         self.assertListEqual(objects['foo']['arcs'], [[0, 0], [9, 0], [0, 9], [0, 0]])
 
     def test_prequantize_observes_the_bounding_box(self):
@@ -2126,7 +2145,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [-1, -1, 2, 2], 10)
+        self.prequantize(objects, [-1, -1, 2, 2], 10)
         self.assertListEqual(objects['foo']['arcs'], [[3, 3], [6, 3], [3, 6], [3, 3]])
 
     def test_prequantize_applies_to_points_as_well_as_arcs(self):
@@ -2137,7 +2156,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 1, 1], 1e4)
+        self.prequantize(objects, [0, 0, 1, 1], 1e4)
         self.assertListEqual(objects['foo']['coordinates'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
 
     def test_prequantize_skips_coincident_points_in_line(self):
@@ -2148,7 +2167,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.prequantize(objects, [0, 0, 2, 2], 3)
         self.assertListEqual(objects['foo']['arcs'], [[0, 0], [1, 1], [2, 2]])
 
     def test_prequantize_skips_coincident_points_in_polygon(self):
@@ -2159,7 +2178,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.prequantize(objects, [0, 0, 2, 2], 3)
         self.assertListEqual(objects['foo']['arcs'], [[[0, 0], [1, 1], [2, 2], [0, 0]]])
 
     def test_prequantize_does_not_skip_coincident_points_in_point(self):
@@ -2170,7 +2189,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.prequantize(objects, [0, 0, 2, 2], 3)
         self.assertListEqual(objects['foo']['coordinates'], [[0, 0], [1, 1], [1, 1], [2, 2], [0, 0]])
 
     def test_prequantize_includes_closing_point_in_degenerate_lines(self):
@@ -2181,7 +2200,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.prequantize(objects, [0, 0, 2, 2], 3)
         self.assertListEqual(objects['foo']['arcs'], [[1, 1], [1, 1]])
 
     def test_prequantize_includes_closing_point_in_degenerate_polygons(self):
@@ -2192,7 +2211,7 @@ class PrequantizeTestCase(unittest.TestCase):
             }
         }
 
-        prequantize.Prequantize(objects, [0, 0, 2, 2], 3)
+        self.prequantize(objects, [0, 0, 2, 2], 3)
         self.assertListEqual(objects['foo']['arcs'], [[[1, 1], [1, 1], [1, 1], [1, 1]]])
 
 

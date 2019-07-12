@@ -9,9 +9,11 @@ class Cut(object):
     to remove exact duplicate arcs.
     """
 
-    def __init__(self, topology):
-        j = Join(topology)
-        self.junctions = j.value
+    def __init__(self):
+        self.join = Join()
+
+    def __call__(self, topology, *args, **kwargs):
+        self.junctions = self.join(topology)
         self.coordinates = topology['coordinates']
         self.lines = topology['lines']
         self.rings = topology['rings']
@@ -59,7 +61,7 @@ class Cut(object):
 
                 ring_mid += 1
 
-        self.value = topology
+        return topology
 
     def rotate_array(self, array, start, end, offset):
         self.reverse(array, start, end)

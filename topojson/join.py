@@ -1,5 +1,4 @@
 
-from commons import set_in_list
 from hash.hash import HashMap, HashSet
 from hash.point import equal as equal_point
 from hash.point import hash as hash_point
@@ -24,7 +23,10 @@ class Join(object):
     line is never rotated.
     """
 
-    def __init__(self, topology):
+    def __init__(self):
+        pass
+
+    def __call__(self, topology, *args, **kwargs):
         self.coordinates = topology['coordinates']
         self.lines = topology['lines']
         self.rings = topology['rings']
@@ -32,7 +34,7 @@ class Join(object):
         self.visited_by_index = [None] * len(self.coordinates)
         self.left_by_index = [None] * len(self.coordinates)
         self.right_by_index = [None] * len(self.coordinates)
-        self.junction_by_index = list()
+        self.junction_by_index = [0] * len(self.coordinates)
         self.junction_count = 0
 
         for i in range(len(self.coordinates)):
@@ -47,17 +49,17 @@ class Join(object):
             line_start += 1
             next_index = self.indexes[line_start]
             self.junction_count += 1
-            set_in_list(self.junction_by_index, current_index, 1)
+            self.junction_by_index[current_index] = 1
             line_start += 1
 
             while line_start <= line_end:
                 previous_index = current_index
                 current_index = next_index
                 next_index = self.indexes[line_start]
-                self.sequence(previous_index, current_index, next_index)
+                self.sequence(i, previous_index, current_index, next_index)
                 line_start += 1
 
-        self.visited_by_index = self.left_by_index = self.right_by_index = None
+        self.visited_by_index = self.left_by_index = self.right_by_index = None, None, None
         self.junction_by_point = HashSet(self.junction_count * 1.4, hash_point, equal_point)
 
         len_junction_by_index = len(self.junction_by_index)
@@ -66,14 +68,14 @@ class Join(object):
             if j < len_junction_by_index and self.junction_by_index[j]:
                 self.junction_by_point.add(self.coordinates[j])
 
-        self.value = self.junction_by_point
+        return self.junction_by_point
 
-    def sequence(self, previous_index, current_index, next_index):
+    def sequence(self, i, previous_index, current_index, next_index):
         # ignore self-intersection
-        if self.visited_by_index[current_index] == 1:
+        if self.visited_by_index[current_index] == i:
             return
 
-        self.visited_by_index[current_index] = 1
+        self.visited_by_index[current_index] = i
         left_index = self.left_by_index[current_index]
 
         if 0 <= left_index:
@@ -89,10 +91,15 @@ class Join(object):
 
     def index(self):
         index_by_point = HashMap(len(self.coordinates) * 1.4, self.hash_index, self.equal_index, list, -1, list)
-        indexes = [None] * len(self.coordinates)
+        indexes = [0] * len(self.coordinates)
 
-        for i in range(len(self.coordinates)):
+        i = 0
+        while i < len(self.coordinates):
             indexes[i] = index_by_point.maybe_set(i, i)
+            i += 1
+
+        # for i in range(len(self.coordinates)):
+        #     indexes[i] = index_by_point.maybe_set(i, i)
 
         return indexes
 
