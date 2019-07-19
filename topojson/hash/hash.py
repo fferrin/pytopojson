@@ -1,14 +1,18 @@
 import math
 
+from topojson.commons import Int32Array
+
 
 class HashMap(object):
-    def __init__(self, size, hash, equal, key_type=list, key_empty=None, value_type=list):
+    def __init__(self, size, hash, equal, key_type=Int32Array, key_empty=None, value_type=Int32Array):
         self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
         self.hash = hash
         self.equal = equal
         self.key_empty = key_empty
         self.key_store = [None] * self.size
         self.val_store = [None] * self.size
+        # self.key_store = key_type(self.size)
+        # self.val_store = value_type(self.size)
         self.mask = self.size - 1
 
         for i in range(self.size):

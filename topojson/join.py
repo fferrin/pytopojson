@@ -2,6 +2,7 @@
 from hash.hash import HashMap, HashSet
 from hash.point import equal as equal_point
 from hash.point import hash as hash_point
+from topojson.commons import Int8Array, Int32Array
 
 
 # Computes the bounding box of the specified hash of GeoJSON objects.
@@ -31,10 +32,14 @@ class Join(object):
         self.lines = topology['lines']
         self.rings = topology['rings']
         self.indexes = self.index()
-        self.visited_by_index = [None] * len(self.coordinates)
-        self.left_by_index = [None] * len(self.coordinates)
-        self.right_by_index = [None] * len(self.coordinates)
-        self.junction_by_index = [0] * len(self.coordinates)
+        self.visited_by_index = Int32Array(len(self.coordinates))
+        self.left_by_index = Int32Array(len(self.coordinates))
+        self.right_by_index = Int32Array(len(self.coordinates))
+        self.junction_by_index = Int8Array(len(self.coordinates))
+        # self.visited_by_index = [None] * len(self.coordinates)
+        # self.left_by_index = [None] * len(self.coordinates)
+        # self.right_by_index = [None] * len(self.coordinates)
+        # self.junction_by_index = [0] * len(self.coordinates)
         self.junction_count = 0
 
         for i in range(len(self.coordinates)):
@@ -90,14 +95,16 @@ class Join(object):
             self.right_by_index[current_index] = next_index
 
     def index(self):
-        index_by_point = HashMap(len(self.coordinates) * 1.4, self.hash_index, self.equal_index, list, -1, list)
-        indexes = [0] * len(self.coordinates)
+        index_by_point = HashMap(len(self.coordinates) * 1.4, self.hash_index, self.equal_index, Int32Array, -1, Int32Array)
+        indexes = Int32Array(len(self.coordinates))
 
         i = 0
         while i < len(self.coordinates):
-            indexes[i] = index_by_point.maybe_set(i, i)
+            tmp = index_by_point.maybe_set(i, i)
+            indexes[i] = tmp
             i += 1
 
+        # TODO: En maybe_set llama a self.equal_index y habría que ver qué función se pasa porque da frula
         # for i in range(len(self.coordinates)):
         #     indexes[i] = index_by_point.maybe_set(i, i)
 
