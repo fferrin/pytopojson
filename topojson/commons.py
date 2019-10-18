@@ -18,11 +18,8 @@ class Array(object):
             return None
 
     def __setitem__(self, key, value):
-        if self.size <= key:
-            self.list += [0] * (key - self.size + 1)
-            self.size = key
-
-        self.list[key] = self._convert(value)
+        if key < self.size:
+            self.list[key] = self._convert(value)
 
     def __len__(self):
         return self.size
