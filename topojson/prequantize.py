@@ -34,7 +34,7 @@ class Prequantize(object):
         o['coordinates'] = self.quantize_point(o['coordinates'])
 
     def _multi_point_call(self, o):
-        o['coordinates'] = map(self.quantize_point, o['coordinates'])
+        o['coordinates'] = list(map(self.quantize_point, o['coordinates']))
 
     def _line_string_call(self, o):
         o['arcs'] = self.quantize_line(o['arcs'])
@@ -84,7 +84,7 @@ class Prequantize(object):
         return self.quantize_points(inp, 4)
 
     def quantize_polygon(self, inp):
-        return map(self.quantize_ring, inp)
+        return list(map(self.quantize_ring, inp))
 
     def quantize_geometry(self, o):
         if o and o['type'] in self.quantize_geometry_type:
