@@ -1,7 +1,7 @@
 
-from hash.hash import HashMap, HashSet
-from hash.point import equal as equal_point
-from hash.point import hash as hash_point
+from topojson.hash.hash import HashMap, HashSet
+from topojson.hash.point import equal as equal_point
+from topojson.hash.point import hash as hash_point
 from topojson.commons import Int8Array, Int32Array
 
 

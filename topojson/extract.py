@@ -26,7 +26,7 @@ class Extract(object):
 
     def __call__(self, objects, *args, **kwargs):
         self.extract_geometry_type = {
-            'GeometryCollection': lambda o: map(self.extract_geometry, o['geometries']),
+            'GeometryCollection': self._geometry_collection_call,
             'LineString': self._line_string_call,
             'MultiLineString': self._multi_line_string_call,
             'Polygon': self._polygon_call,
@@ -50,19 +50,20 @@ class Extract(object):
         }
 
     def _line_string_call(self, o):
-        o['arcs'] = self.extract_line(o['arcs']).values()
+        o['arcs'] = list(self.extract_line(o['arcs']).values())
 
     def _multi_line_string_call(self, o):
-        o['arcs'] = [r.values() for r in map(self.extract_line, o['arcs'])]
-        # o['arcs'] = map(self.extract_line, o['arcs'])
+        o['arcs'] = [list(r.values()) for r in map(self.extract_line, o['arcs'])]
 
     def _polygon_call(self, o):
-        o['arcs'] = [r.values() for r in map(self.extract_ring, o['arcs'])]
-        # o['arcs'] = map(self.extract_ring, o['arcs'])
+        o['arcs'] = [list(r.values()) for r in map(self.extract_ring, o['arcs'])]
 
     def _multi_polygon_call(self, o):
-        o['arcs'] = [r.values() for r in map(self.extract_multi_ring, o['arcs'])]
-        # o['arcs'] = map(self.extract_multi_ring, o['arcs'])
+        o['arcs'] = [list(r.values()) for r in map(self.extract_multi_ring, o['arcs'])]
+
+    def _geometry_collection_call(self, o):
+        for geometry in o['geometries']:
+            self.extract_geometry(geometry)
 
     def extract_geometry(self, geometry):
         if geometry and geometry['type'] in self.extract_geometry_type:
@@ -82,9 +83,8 @@ class Extract(object):
             1: self.index - 1
         }
 
-        append_to.append(arc.values())
+        append_to.append(list(arc.values()))
 
-        # TODO: Original project returns arc
         return arc
 
     def extract_line(self, line):
@@ -94,4 +94,4 @@ class Extract(object):
         return self.extract(ring, self.rings)
 
     def extract_multi_ring(self, rings):
-        return [r.values() for r in map(self.extract_ring, rings)]
+        return [list(r.values()) for r in map(self.extract_ring, rings)]
