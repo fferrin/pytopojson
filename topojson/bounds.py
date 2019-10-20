@@ -8,13 +8,13 @@ class BoundingBox(object):
 
     def __call__(self, geometry, *args, **kwargs):
         self.bound_geometry_type = {
-            'GeometryCollection': lambda o: map(self.bound_geometry, o['geometries']),
+            'GeometryCollection': lambda o: list(map(self.bound_geometry, o['geometries'])),
             'Point': lambda o: self.bound_point(o['cordinates']),
-            'MultiPoint': lambda o: map(self.bound_point, o['coordinates']),
+            'MultiPoint': lambda o: list(map(self.bound_point, o['coordinates'])),
             'LineString': lambda o: self.bound_line(o['arcs']),
-            'MultiLineString': lambda o: map(self.bound_line, o['arcs']),
-            'Polygon': lambda o: map(self.bound_line, o['arcs']),
-            'MultiPolygon': lambda o: map(self.bound_multiline, o['arcs'])
+            'MultiLineString': lambda o: list(map(self.bound_line, o['arcs'])),
+            'Polygon': lambda o: list(map(self.bound_line, o['arcs'])),
+            'MultiPolygon': lambda o: list(map(self.bound_multiline, o['arcs']))
         }
 
         for k in geometry:
@@ -35,7 +35,7 @@ class BoundingBox(object):
         self.y_1 = max(y, self.y_1)
 
     def bound_line(self, coordinates):
-        map(self.bound_point, coordinates)
+        list(map(self.bound_point, coordinates))
 
     def bound_multiline(self, coordinates):
-        map(self.bound_line, coordinates)
+        list(map(self.bound_line, coordinates))
