@@ -5,7 +5,7 @@ class Geometry(object):
 
     def __call__(self, inputs, *args, **kwargs):
         self.output = dict()
-        for k, v in inputs.iteritems():
+        for k, v in inputs.items():
             self.output[k] = self.geomify_object(v)
 
         return self.output
@@ -23,7 +23,7 @@ class Geometry(object):
     def geomify_feature_collection(self, input):
         output = dict()
         output['type'] = 'GeometryCollection'
-        output['geometries'] = map(self.geomify_feature, input['features'])
+        output['geometries'] = list(map(self.geomify_feature, input['features']))
         if input.get('bbox', None):
             output['bbox'] = input['bbox']
 
@@ -48,7 +48,7 @@ class Geometry(object):
         output = dict()
         if input['type'] == 'GeometryCollection':
             output['type'] = 'GeometryCollection'
-            output['geometries'] = map(self.geomify_geometry, input['geometries'])
+            output['geometries'] = list(map(self.geomify_geometry, input['geometries']))
         elif input['type'] == 'Point' or input['type'] == 'MultiPoint':
             output['type'] = input['type']
             output['coordinates'] = input['coordinates']
