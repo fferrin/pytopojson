@@ -1,18 +1,16 @@
 import math
 
-from topojson.commons import Int32Array
+from topojson.commons import Array
 
 
 class HashMap(object):
-    def __init__(self, size, hash, equal, key_type=Int32Array, key_empty=None, value_type=Int32Array):
-        self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
+    def __init__(self, size, hash, equal, key_type=Array, key_empty=None, value_type=Array):
         self.hash = hash
         self.equal = equal
         self.key_empty = key_empty
-        self.key_store = [None] * self.size
-        self.val_store = [None] * self.size
-        # self.key_store = key_type(self.size)
-        # self.val_store = value_type(self.size)
+        self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
+        self.key_store = key_type(self.size)
+        self.val_store = value_type(self.size)
         self.mask = self.size - 1
 
         for i in range(self.size):
@@ -55,10 +53,11 @@ class HashMap(object):
         while match_key != self.key_empty:
             if self.equal(match_key, key):
                 return self.val_store[index]
+
+            collisions += 1
             if self.size <= collisions:
                 raise ValueError('Full HashMap')
 
-            collisions += 1
             index = (index + 1) & self.mask
             match_key = self.key_store[index]
 
@@ -98,12 +97,12 @@ class HashMap(object):
 
 
 class HashSet(object):
-    def __init__(self, size, hash, equal, type=list, empty=None):
+    def __init__(self, size, hash, equal, type=Array, empty=None):
         self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
         self.hash = hash
         self.equal = equal
         self.empty = empty
-        self.store = [None] * self.size
+        self.store = type(self.size)
         self.mask = self.size - 1
 
         for i in range(self.size):
