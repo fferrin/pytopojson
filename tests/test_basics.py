@@ -15,7 +15,7 @@ class BoundsTestCase(unittest.TestCase):
             }
         }
 
-        self.assertListEqual(self.bbox(foo), [0, 0, 1, 2])
+        self.assertCountEqual(self.bbox(foo), [0, 0, 1, 2])
 
     def test_bounds_considers_points_as_well_as_arcs(self):
         foo = {
@@ -25,7 +25,7 @@ class BoundsTestCase(unittest.TestCase):
             }
         }
 
-        self.assertListEqual(self.bbox(foo), [0, 0, 1, 2])
+        self.assertCountEqual(self.bbox(foo), [0, 0, 1, 2])
 
 
 class CutTestCase(unittest.TestCase):
@@ -907,8 +907,8 @@ class CutTestCase(unittest.TestCase):
             }
         }, c['objects'])
 
-        self.assertListEqual(c.value['topology']['coordinates'].slice(0, 4), [[1, 0], [0, 1], [0, 0], [1, 0]])
-        self.assertListEqual(c.value['topology']['coordinates'].slice(4, 8), [[1, 0], [2, 2], [2, 1], [1, 0]])
+        self.assertCountEqual(c.value['topology']['coordinates'].slice(0, 4), [[1, 0], [0, 1], [0, 0], [1, 0]])
+        self.assertCountEqual(c.value['topology']['coordinates'].slice(4, 8), [[1, 0], [2, 2], [2, 1], [1, 0]])
 
     def test_cut_overlapping_rings_abcda_and_befcb_are_cut_into_bc_cdab_and_befc_cb(self):
         e = self.extract({
@@ -946,7 +946,7 @@ class DeltaTestCase(unittest.TestCase):
             [[0, 0], [9999, 0], [0, 9999], [0, 0]]
         ])
 
-        self.assertListEqual(
+        self.assertCountEqual(
             d,
             [
                 [[0, 0], [9999, 0], [-9999, 9999], [0, -9999]]
@@ -958,7 +958,7 @@ class DeltaTestCase(unittest.TestCase):
             [[0, 0], [9999, 0], [9999, 0], [0, 9999], [0, 0]]
         ])
 
-        self.assertListEqual(
+        self.assertCountEqual(
             d,
             [
                 [[0, 0], [9999, 0], [-9999, 9999], [0, -9999]]
@@ -970,7 +970,7 @@ class DeltaTestCase(unittest.TestCase):
             [[12345, 12345], [12345, 12345], [12345, 12345], [12345, 12345]]
         ])
 
-        self.assertListEqual(
+        self.assertCountEqual(
             d,
             [
                 [[12345, 12345], [0, 0]]
@@ -995,7 +995,7 @@ class ExtractTestCase(unittest.TestCase):
             }
         })
 
-        self.assertListEqual(topology['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(topology['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0], [1, 0], [2, 0]])
 
     def test_extract_does_not_copy_point_geometries_into_the_coordinate_buffer(self):
         topology = self.extract({
@@ -1009,9 +1009,9 @@ class ExtractTestCase(unittest.TestCase):
             }
         })
 
-        self.assertListEqual(topology['coordinates'], [])
-        self.assertListEqual(topology['objects']['foo']['arcs'], [0, 0])
-        self.assertListEqual(topology['objects']['bar']['arcs'], [[0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(topology['coordinates'], [])
+        self.assertCountEqual(topology['objects']['foo']['arcs'], [0, 0])
+        self.assertCountEqual(topology['objects']['bar']['arcs'], [[0, 0], [1, 0], [2, 0]])
 
     def test_extract_includes_closing_coordinates_in_polygons(self):
         topology = self.extract({
@@ -1021,7 +1021,7 @@ class ExtractTestCase(unittest.TestCase):
             }
         })
 
-        self.assertListEqual(topology['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0]])
+        self.assertCountEqual(topology['coordinates'], [[0, 0], [1, 0], [2, 0], [0, 0]])
 
     def test_extract_represents_lines_as_contiguous_slices_of_the_coordinate_buffer(self):
         topology = self.extract({
@@ -1091,8 +1091,8 @@ class ExtractTestCase(unittest.TestCase):
             }
         })
 
-        self.assertListEqual(topology['lines'], [[0, 2], [3, 5]])
-        self.assertListEqual(topology['rings'], [[6, 9]])
+        self.assertCountEqual(topology['lines'], [[0, 2], [3, 5]])
+        self.assertCountEqual(topology['rings'], [[6, 9]])
 
     def test_extract_supports_nested_geometry_collections(self):
         topology = self.extract({
@@ -1573,7 +1573,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [2, 0]])
 
     def test_join_reversed_duplicate_lines_abc_and_cba_have_junctions_at_their_end_points(self):
         e = self.extract({
@@ -1588,7 +1588,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [2, 0]])
 
     def test_join_exact_duplicate_rings_abca_and_abca_have_no_junctions(self):
         e = self.extract({
@@ -1603,7 +1603,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_reversed_duplicate_rings_abca_and_abca_have_no_junctions(self):
         e = self.extract({
@@ -1618,7 +1618,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_rotated_duplicate_rings_abca_and_abca_have_no_junctions(self):
         e = self.extract({
@@ -1633,7 +1633,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_ring_abca_and_abca_have_a_junction_at_a(self):
         e = self.extract({
@@ -1648,7 +1648,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0]])
 
     def test_join_ring_bcab_and_abca_have_a_junction_at_a(self):
         e = self.extract({
@@ -1663,7 +1663,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0]])
 
     def test_join_ring_abca_and_bcab_have_a_junction_at_b(self):
         e = self.extract({
@@ -1678,7 +1678,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[1, 0]])
+        self.assertCountEqual(junctions.values(), [[1, 0]])
 
     def test_join_when_an_old_arc_abc_extends_a_new_arc_ab_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1693,7 +1693,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_reversed_old_arc_cba_extends_a_new_arc_ab_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1708,7 +1708,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_join_when_a_new_arc_ade_shares_its_start_with_an_old_arc_abc_there_is_a_junction_at_a(self):
         e = self.extract({
@@ -1723,7 +1723,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [2, 1]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [2, 0], [2, 1]])
 
     def test_join_ring_aba_has_no_junctions(self):
         e = self.extract({
@@ -1734,7 +1734,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_ring_aa_has_no_junctions(self):
         e = self.extract({
@@ -1745,7 +1745,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_degenerate_ring_a_has_no_junctions(self):
         e = self.extract({
@@ -1756,7 +1756,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_when_a_new_line_dec_shares_its_end_with_an_old_line_abc_there_is_a_junction_at_c(self):
         e = self.extract({
@@ -1771,7 +1771,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [0, 1]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [2, 0], [0, 1]])
 
     def test_join_when_a_new_line_abc_extends_an_old_line_ab_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1786,7 +1786,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_abc_extends_a_reversed_old_line_ba_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1801,7 +1801,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_starts_bc_in_the_middle_of_an_old_line_abc_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1816,7 +1816,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_bc_starts_in_the_middle_of_a_reversed_old_line_cba_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1831,7 +1831,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [1, 0], [2, 0]])
 
     def test_join_when_a_new_line_abd_deviates_from_an_old_line_abc_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1846,7 +1846,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_abd_deviates_from_a_reversed_old_line_cba_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1861,7 +1861,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
+        self.assertCountEqual(junctions.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_dbc_merges_into_an_old_line_abc_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1876,7 +1876,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [2, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_dbc_merges_into_a_reversed_old_line_cba_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1891,7 +1891,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
+        self.assertCountEqual(junctions.values(), [[2, 0], [0, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_dbe_shares_a_single_midpoint_with_an_old_line_abc_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1906,7 +1906,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [2, 0], [2, 1], [1, 0], [0, 1]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [2, 0], [2, 1], [1, 0], [0, 1]])
 
     def test_VER_join_when_a_new_line_dbe_shares_a_single_midpoint_with_an_old_line_abc_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1921,7 +1921,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0], [1, 0], [3, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [4, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_new_line_abde_skips_a_point_with_a_reversed_old_line_edcba_there_is_a_junction_at_b_and_d(self):
         e = self.extract({
@@ -1936,7 +1936,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[4, 0], [0, 0], [1, 0], [3, 0]])
+        self.assertCountEqual(junctions.values(), [[4, 0], [0, 0], [1, 0], [3, 0]])
 
     def test_join_when_a_line_abcdbe_self_intersects_with_its_middle_there_are_no_junctions(self):
         e = self.extract({
@@ -1947,7 +1947,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [4, 0]])
 
     def test_join_when_a_line_abacd_self_intersects_with_its_start_there_are_no_junctions(self):
         e = self.extract({
@@ -1958,7 +1958,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [4, 0]])
 
     def test_join_when_a_line_abcdbd_self_intersects_with_its_end_there_are_no_junctions(self):
         e = self.extract({
@@ -1969,7 +1969,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [4, 0]])
 
     def test_join_when_an_old_line_abcdbe_self_intersects_and_shares_a_point_b_there_is_a_junction_at_b(self):
         e = self.extract({
@@ -1984,7 +1984,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0], [4, 0], [1, 0], [0, 1], [2, 1]])
+        self.assertCountEqual(junctions.values(), [[0, 0], [4, 0], [1, 0], [0, 1], [2, 1]])
 
     def test_join_when_a_line_abca_is_closed_there_is_a_junction_at_a(self):
         e = self.extract({
@@ -1995,7 +1995,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[0, 0]])
+        self.assertCountEqual(junctions.values(), [[0, 0]])
 
     def test_join_when_a_ring_abca_is_closed_there_are_no_junctions(self):
         e = self.extract({
@@ -2006,7 +2006,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_exact_duplicate_rings_abca_and_abca_share_the_arc_abca(self):
         e = self.extract({
@@ -2016,12 +2016,12 @@ class JoinTestCase(unittest.TestCase):
             },
             'abca2': {
                 'type': 'Polygon',
-                'arcs': [[0, 0], [1, 0], [0, 1], [0, 0]]
+                'arcs': [[[0, 0], [1, 0], [0, 1], [0, 0]]]
             }
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_reversed_duplicate_rings_abca_and_acba_share_the_arc_abca(self):
         e = self.extract({
@@ -2036,7 +2036,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_coincident_rings_abca_and_bcab_share_the_arc_bcab(self):
         e = self.extract({
@@ -2051,7 +2051,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_coincident_rings_abca_and_bacb_share_the_arc_bcab(self):
         e = self.extract({
@@ -2066,7 +2066,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [])
+        self.assertCountEqual(junctions.values(), [])
 
     def test_join_coincident_rings_abca_and_dbed_share_the_point_b(self):
         e = self.extract({
@@ -2081,7 +2081,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[1, 0]])
+        self.assertCountEqual(junctions.values(), [[1, 0]])
 
     def test_join_coincident_ring_abca_and_line_dbe_share_the_point_b(self):
         e = self.extract({
@@ -2096,7 +2096,7 @@ class JoinTestCase(unittest.TestCase):
         })
         junctions = self.join(e)
 
-        self.assertItemsEqual(junctions.values(), [[2, 1], [2, 2], [1, 0]])
+        self.assertCountEqual(junctions.values(), [[2, 1], [2, 2], [1, 0]])
 
 
 class PrequantizeTestCase(unittest.TestCase):
@@ -2124,7 +2124,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 1, 1], 1e4)
-        self.assertListEqual(objects['foo']['arcs'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
+        self.assertCountEqual(objects['foo']['arcs'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
 
     def test_prequantize_observes_the_quantization_parameter(self):
         objects = {
@@ -2135,7 +2135,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 1, 1], 10)
-        self.assertListEqual(objects['foo']['arcs'], [[0, 0], [9, 0], [0, 9], [0, 0]])
+        self.assertCountEqual(objects['foo']['arcs'], [[0, 0], [9, 0], [0, 9], [0, 0]])
 
     def test_prequantize_observes_the_bounding_box(self):
         objects = {
@@ -2146,7 +2146,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [-1, -1, 2, 2], 10)
-        self.assertListEqual(objects['foo']['arcs'], [[3, 3], [6, 3], [3, 6], [3, 3]])
+        self.assertCountEqual(objects['foo']['arcs'], [[3, 3], [6, 3], [3, 6], [3, 3]])
 
     def test_prequantize_applies_to_points_as_well_as_arcs(self):
         objects = {
@@ -2157,7 +2157,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 1, 1], 1e4)
-        self.assertListEqual(objects['foo']['coordinates'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
+        self.assertCountEqual(objects['foo']['coordinates'], [[0, 0], [9999, 0], [0, 9999], [0, 0]])
 
     def test_prequantize_skips_coincident_points_in_line(self):
         objects = {
@@ -2168,7 +2168,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(objects['foo']['arcs'], [[0, 0], [1, 1], [2, 2]])
+        self.assertCountEqual(objects['foo']['arcs'], [[0, 0], [1, 1], [2, 2]])
 
     def test_prequantize_skips_coincident_points_in_polygon(self):
         objects = {
@@ -2179,7 +2179,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(objects['foo']['arcs'], [[[0, 0], [1, 1], [2, 2], [0, 0]]])
+        self.assertCountEqual(objects['foo']['arcs'], [[[0, 0], [1, 1], [2, 2], [0, 0]]])
 
     def test_prequantize_does_not_skip_coincident_points_in_point(self):
         objects = {
@@ -2190,7 +2190,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(objects['foo']['coordinates'], [[0, 0], [1, 1], [1, 1], [2, 2], [0, 0]])
+        self.assertCountEqual(objects['foo']['coordinates'], [[0, 0], [1, 1], [1, 1], [2, 2], [0, 0]])
 
     def test_prequantize_includes_closing_point_in_degenerate_lines(self):
         objects = {
@@ -2201,7 +2201,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(objects['foo']['arcs'], [[1, 1], [1, 1]])
+        self.assertCountEqual(objects['foo']['arcs'], [[1, 1], [1, 1]])
 
     def test_prequantize_includes_closing_point_in_degenerate_polygons(self):
         objects = {
@@ -2212,7 +2212,7 @@ class PrequantizeTestCase(unittest.TestCase):
         }
 
         self.prequantize(objects, [0, 0, 2, 2], 3)
-        self.assertListEqual(objects['foo']['arcs'], [[[1, 1], [1, 1], [1, 1], [1, 1]]])
+        self.assertCountEqual(objects['foo']['arcs'], [[[1, 1], [1, 1], [1, 1], [1, 1]]])
 
 
 if __name__ == '__main__':

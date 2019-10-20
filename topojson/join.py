@@ -36,10 +36,6 @@ class Join(object):
         self.left_by_index = Int32Array(len(self.coordinates))
         self.right_by_index = Int32Array(len(self.coordinates))
         self.junction_by_index = Int8Array(len(self.coordinates))
-        # self.visited_by_index = [None] * len(self.coordinates)
-        # self.left_by_index = [None] * len(self.coordinates)
-        # self.right_by_index = [None] * len(self.coordinates)
-        # self.junction_by_index = [0] * len(self.coordinates)
         self.junction_count = 0
 
         for i in range(len(self.coordinates)):
@@ -64,7 +60,34 @@ class Join(object):
                 self.sequence(i, previous_index, current_index, next_index)
                 line_start += 1
 
-        self.visited_by_index = self.left_by_index = self.right_by_index = None, None, None
+            self.junction_count += 1
+            self.junction_by_index[next_index] = 1
+
+        # TODO: Cambiar a una forma más compacta
+        for i in range(len(self.coordinates)):
+            self.visited_by_index[i] = -1
+
+        for i in range(len(self.rings)):
+            ring = self.rings[i]
+            ring_start = ring[0] + 1
+            ring_end = ring[1]
+
+            previous_index = self.indexes[ring_end - 1]
+            current_index = self.indexes[ring_start - 1]
+            next_index = self.indexes[ring_start]
+
+            self.sequence(i, previous_index, current_index, next_index)
+
+            ring_start += 1
+
+            while ring_start <= ring_end:
+                previous_index = current_index
+                current_index = next_index
+                next_index = self.indexes[ring_start]
+                self.sequence(i, previous_index, current_index, next_index)
+                ring_start += 1
+
+        self.visited_by_index = self.left_by_index = self.right_by_index = None
         self.junction_by_point = HashSet(self.junction_count * 1.4, hash_point, equal_point)
 
         len_junction_by_index = len(self.junction_by_index)
@@ -91,22 +114,16 @@ class Join(object):
                 self.junction_by_index[current_index] = 1
 
         else:
-            self.left_by_index[current_index] = previous_index
-            self.right_by_index[current_index] = next_index
+            self.left_by_index[current_index] = 0 if previous_index is None else previous_index
+            self.right_by_index[current_index] = 0 if next_index is None else next_index
 
     def index(self):
         index_by_point = HashMap(len(self.coordinates) * 1.4, self.hash_index, self.equal_index, Int32Array, -1, Int32Array)
         indexes = Int32Array(len(self.coordinates))
 
-        i = 0
-        while i < len(self.coordinates):
+        for i in range(len(self.coordinates)):
             tmp = index_by_point.maybe_set(i, i)
             indexes[i] = tmp
-            i += 1
-
-        # TODO: En maybe_set llama a self.equal_index y habría que ver qué función se pasa porque da frula
-        # for i in range(len(self.coordinates)):
-        #     indexes[i] = index_by_point.maybe_set(i, i)
 
         return indexes
 
