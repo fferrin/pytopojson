@@ -51,17 +51,11 @@ class CutTestCase(unittest.TestCase):
         self.assertDictEqual({
             'abc': {
                 'type': 'LineString',
-                'arcs': {
-                    0: 0,
-                    1: 2
-                }
+                'arcs': {0: 0, 1: 2}
             },
             'abc2': {
                 'type': 'LineString',
-                'arcs': {
-                    0: 3,
-                    1: 5
-                }
+                'arcs': {0: 3, 1: 5}
             }
         }, c['objects'])
 
@@ -82,17 +76,11 @@ class CutTestCase(unittest.TestCase):
         self.assertDictEqual({
             'abc': {
                 'type': 'LineString',
-                'arcs': {
-                    0: 0,
-                    1: 2
-                }
+                'arcs': {0: 0, 1: 2}
             },
             'cba': {
                 'type': 'LineString',
-                'arcs': {
-                    0: 3,
-                    1: 5
-                }
+                'arcs': {0: 3, 1: 5}
             }
         }, c['objects'])
 
@@ -188,7 +176,7 @@ class CutTestCase(unittest.TestCase):
         self.assertDictEqual({
             'abcaLine': {
                 'type': 'LineString',
-                'arcs': [{0: 0, 1: 3}]
+                'arcs': {0: 0, 1: 3}
             },
             'abcaPolygon': {
                 'type': 'Polygon',
@@ -213,7 +201,7 @@ class CutTestCase(unittest.TestCase):
         self.assertDictEqual({
             'abcaLine': {
                 'type': 'LineString',
-                'arcs': [{0: 0, 1: 3}]
+                'arcs': {0: 0, 1: 3}
             },
             'bcabPolygon': {
                 'type': 'Polygon',
@@ -238,7 +226,7 @@ class CutTestCase(unittest.TestCase):
         self.assertDictEqual({
             'bcabLine': {
                 'type': 'LineString',
-                'arcs': [{0: 0, 1: 3}]
+                'arcs': {0: 0, 1: 3}
             },
             'abcaPolygon': {
                 'type': 'Polygon',
