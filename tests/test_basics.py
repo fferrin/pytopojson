@@ -894,7 +894,7 @@ class CutTestCase(unittest.TestCase):
             }
         })
 
-        c = self.cut(e)
+        topology = self.cut(e)
 
         self.assertDictEqual({
             'abca': {
@@ -905,10 +905,10 @@ class CutTestCase(unittest.TestCase):
                 'type': 'Polygon',
                 'arcs': [{0: 4, 1: 7}]
             }
-        }, c['objects'])
+        }, topology['objects'])
 
-        self.assertCountEqual(c.value['topology']['coordinates'].slice(0, 4), [[1, 0], [0, 1], [0, 0], [1, 0]])
-        self.assertCountEqual(c.value['topology']['coordinates'].slice(4, 8), [[1, 0], [2, 2], [2, 1], [1, 0]])
+        self.assertCountEqual(topology['coordinates'][0:4], [[1, 0], [0, 1], [0, 0], [1, 0]])
+        self.assertCountEqual(topology['coordinates'][4:8], [[1, 0], [2, 2], [2, 1], [1, 0]])
 
     def test_cut_overlapping_rings_abcda_and_befcb_are_cut_into_bc_cdab_and_befc_cb(self):
         e = self.extract({

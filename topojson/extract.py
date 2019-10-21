@@ -1,3 +1,4 @@
+from topojson.commons import ListDict
 
 
 class Extract(object):
@@ -37,9 +38,22 @@ class Extract(object):
         self.lines = list()
         self.rings = list()
         self.coordinates = list()
+        # self.lines = ListDict()
+        # self.rings = ListDict()
+        # self.coordinates = ListDict()
 
         for k in objects:
             self.extract_geometry(objects[k])
+
+        lines = list()
+        # lines = ListDict()
+        for line in self.lines:
+            lines.append(line)
+
+        rings = list()
+        # rings = ListDict()
+        for ring in self.rings:
+            rings.append(ring)
 
         return {
             'type': 'Topology',
@@ -50,16 +64,19 @@ class Extract(object):
         }
 
     def _line_string_call(self, o):
-        o['arcs'] = list(self.extract_line(o['arcs']).values())
+        o['arcs'] = self.extract_line(o['arcs'])
+        # o['arcs'] = list(self.extract_line(o['arcs']).values())
 
     def _multi_line_string_call(self, o):
-        o['arcs'] = [list(r.values()) for r in map(self.extract_line, o['arcs'])]
+        o['arcs'] = list(map(self.extract_line, o['arcs']))
+        # o['arcs'] = [ListDict(r.values()) for r in map(self.extract_line, o['arcs'])]
 
     def _polygon_call(self, o):
-        o['arcs'] = [list(r.values()) for r in map(self.extract_ring, o['arcs'])]
+        o['arcs'] = list(map(self.extract_ring, o['arcs']))
+        # o['arcs'] = [ListDict(r.values()) for r in map(self.extract_ring, o['arcs'])]
 
     def _multi_polygon_call(self, o):
-        o['arcs'] = [list(r.values()) for r in map(self.extract_multi_ring, o['arcs'])]
+        o['arcs'] = list(map(self.extract_multi_ring, o['arcs']))
 
     def _geometry_collection_call(self, o):
         for geometry in o['geometries']:
@@ -78,12 +95,15 @@ class Extract(object):
             self.index += 1
             i += 1
 
-        arc = {
-            0: self.index - n,
-            1: self.index - 1
-        }
+        # arc = ListDict({
+        #     0: self.index - n,
+        #     1: self.index - 1
+        # })
 
-        append_to.append(list(arc.values()))
+        arc = [self.index - n, self.index - 1]
+
+        append_to.append(arc)
+        # append_to.append(list(arc.values()))
 
         return arc
 
@@ -94,4 +114,5 @@ class Extract(object):
         return self.extract(ring, self.rings)
 
     def extract_multi_ring(self, rings):
-        return [list(r.values()) for r in map(self.extract_ring, rings)]
+        return list(map(self.extract_ring, rings))
+        # return [ListDict(r.values()) for r in map(self.extract_ring, rings)]
