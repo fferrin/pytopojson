@@ -3,10 +3,6 @@ import unittest
 from topojson import extract, join
 
 
-class DedupTestCase(unittest.TestCase):
-    pass
-
-
 class Geo2TopoTestCase(unittest.TestCase):
     pass
 
