@@ -12,12 +12,12 @@ class Prequantize(object):
             'LineString': self._line_string_call,
             'MultiLineString': self._multi_line_string_call,
             'Polygon': self._polygon_call,
-            'MultiPolygon': self._multi_point_call
+            'MultiPolygon': self._multi_polygon_call
         }
 
         self.x_0, self.y_0, self.x_1, self.y_1 = bbox
-        self.k_x = int((n - 1) / (self.x_1 - self.x_0)) if self.x_0 < self.x_1 else 1
-        self.k_y = int((n - 1) / (self.y_1 - self.y_0)) if self.y_0 < self.y_1 else 1
+        self.k_x = (n - 1) / (self.x_1 - self.x_0) if self.x_0 < self.x_1 else 1
+        self.k_y = (n - 1) / (self.y_1 - self.y_0) if self.y_0 < self.y_1 else 1
 
         for k in objects:
             self.quantize_geometry(objects[k])
@@ -40,16 +40,16 @@ class Prequantize(object):
         o['arcs'] = self.quantize_line(o['arcs'])
 
     def _multi_line_string_call(self, o):
-        o['arcs'] = map(self.quantize_line, o['arcs'])
+        o['arcs'] = list(map(self.quantize_line, o['arcs']))
 
     def _polygon_call(self, o):
         o['arcs'] = self.quantize_polygon(o['arcs'])
 
     def _multi_polygon_call(self, o):
-        o['arcs'] = map(self.quantize_polygon, o['arcs'])
+        o['arcs'] = list(map(self.quantize_polygon, o['arcs']))
 
     def quantize_point(self, inp):
-        return [int(round((inp[0] - self.x_0) * self.k_x)), int(round((inp[1] - self.y_0) * self.k_y))]
+        return [round((inp[0] - self.x_0) * self.k_x), round((inp[1] - self.y_0) * self.k_y)]
 
     def quantize_points(self, inp, m):
         i = j = 0
@@ -59,8 +59,8 @@ class Prequantize(object):
 
         while i < n:
             p_i = inp[i]
-            x = int(round((p_i[0] - self.x_0) * self.k_x))
-            y = int(round((p_i[1] - self.y_0) * self.k_y))
+            x = round((p_i[0] - self.x_0) * self.k_x)
+            y = round((p_i[1] - self.y_0) * self.k_y)
 
             if p != [x, y]:
                 p = [x, y]

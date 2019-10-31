@@ -31,7 +31,7 @@ class Delta(object):
                 arc[k] = [0, 0]
                 k += 1
 
-            arc = arc[:k]
+            arcs[i] = arc[:k]
             i += 1
 
-        return [arc]
+        return arcs

@@ -17,7 +17,6 @@ class Cut(object):
         self.coordinates = topology['coordinates']
         self.lines = list()
         self.rings = list()
-
         self.index = 0
         self.cut_geometry_type = {
             'GeometryCollection': self._geometry_collection_call,
@@ -93,12 +92,14 @@ class Cut(object):
         ring_fixed = self.junctions.has(self.coordinates[ring_mid])
 
         ring_mid += 1
+        r = ring
         while ring_mid < ring_end:
             if self.junctions.has(self.coordinates[ring_mid]):
                 if ring_fixed:
-                    next = {0: ring_mid, 1: ring[1]}
-                    ring[1] = ring_mid
-                    ring['next'] = next
+                    next = {0: ring_mid, 1: r[1]}
+                    r[1] = ring_mid
+                    r['next'] = next
+                    r = next
                 # For the first junction, we can rotate rather than cut.
                 else:
                     self.rotate_array(self.coordinates, ring_start, ring_end, ring_end - ring_mid)

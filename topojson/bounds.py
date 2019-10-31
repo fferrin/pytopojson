@@ -9,7 +9,7 @@ class BoundingBox(object):
     def __call__(self, geometry, *args, **kwargs):
         self.bound_geometry_type = {
             'GeometryCollection': lambda o: list(map(self.bound_geometry, o['geometries'])),
-            'Point': lambda o: self.bound_point(o['cordinates']),
+            'Point': lambda o: self.bound_point(o['coordinates']),
             'MultiPoint': lambda o: list(map(self.bound_point, o['coordinates'])),
             'LineString': lambda o: self.bound_line(o['arcs']),
             'MultiLineString': lambda o: list(map(self.bound_line, o['arcs'])),

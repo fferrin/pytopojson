@@ -6,7 +6,7 @@ class Geometry(object):
     def __call__(self, inputs, *args, **kwargs):
         self.output = dict()
         for k, v in inputs.items():
-            self.output[k] = self.geomify_object(v)
+            self.output[k] = self.geomify_object(inputs[k])
 
         return self.output
 
