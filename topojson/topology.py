@@ -5,7 +5,7 @@
 # Third-party imports
 
 # Application-specific imports
-from topojson import bounds, cut, extract, geometry, prequantize, dedup, join, delta
+from topojson import bounds, cut, dedup, delta, extract, geometry, prequantize
 from topojson.hash.hash import HashMap
 
 
@@ -37,15 +37,13 @@ class Topology(object):
         objects = self.geometry(objects)
         self.bbox = self.bounding_box(objects)
         self.transform = 0 < quantization and self.bbox and self.prequantize(objects, self.bbox, quantization)
-        e = self.extract(objects)
-        c = self.cut(e)
-        self.topology = self.dedup(c)
-        # self.topology = self.dedup(self.cut(self.extract(objects)))
+        self.topology = self.dedup(self.cut(self.extract(objects)))
         self.coordinates = self.topology['coordinates']
         self.index_by_arc = HashMap(len(self.topology['arcs']) * 1.4, self.hash_arc, self.equal_arc)
 
         objects = self.topology['objects']
-        self.topology['bbox'] = self.bbox
+        if self.bbox is not None:
+            self.topology['bbox'] = self.bbox
         self.topology['arcs'] = list(map(lambda arc, i: self._slice(arc, i), self.topology['arcs'], range(len(self.topology['arcs']))))
 
         self.topology.pop('coordinates', None)

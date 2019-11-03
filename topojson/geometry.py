@@ -24,7 +24,7 @@ class Geometry(object):
         output = dict()
         output['type'] = 'GeometryCollection'
         output['geometries'] = list(map(self.geomify_feature, input['features']))
-        if input.get('bbox', None):
+        if input.get('bbox', None) is not None:
             output['bbox'] = input['bbox']
 
         return output
@@ -33,9 +33,8 @@ class Geometry(object):
         output = self.geomify_geometry(input['geometry'])
         if input.get('id', None):
             output['id'] = input['id']
-        if input.get('bbox', None):
+        if input.get('bbox', None) is not None:
             output['bbox'] = input['bbox']
-
         if input.get('properties', None):
             output['properties'] = input['properties']
 
@@ -56,7 +55,7 @@ class Geometry(object):
             output['type'] = input['type']
             output['arcs'] = input['coordinates']
 
-        if input.get('bbox', None):
+        if input.get('bbox', None) is not None:
             output['bbox'] = input['bbox']
 
         return output
