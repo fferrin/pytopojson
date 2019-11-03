@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import prequantize, topology
+from topojson import topology
 
 
 class TopologyTestCase(unittest.TestCase):
