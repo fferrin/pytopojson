@@ -5,8 +5,8 @@
 # Third-party imports
 
 # Application-specific imports
-from topojson import bounds, cut, dedup, delta, extract, geometry, prequantize
-from topojson.hash.hash import HashMap
+from pytopojson import bounds, cut, dedup, delta, extract, geometry, prequantize
+from pytopojson.hash.hash import HashMap
 
 
 class Topology(object):

@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import bounds
+from pytopojson import bounds
 
 
 class BoundsTestCase(unittest.TestCase):

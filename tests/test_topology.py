@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import topology
+from pytopojson import topology
 
 
 class TopologyTestCase(unittest.TestCase):
@@ -649,7 +649,7 @@ class TopologyTestCase(unittest.TestCase):
         """
         The topology `objects` is a map of geometry objects by name, allowing
         multiple GeoJSON geometry objects to share the same topology. When you
-        pass multiple input files to bin/topojson, the basename of the file is
+        pass multiple input files to bin/pytopojson, the basename of the file is
         used as the key, but you're welcome to edit the file to change it.
         """
         topology = self.topology(

@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import extract, join
+from pytopojson import extract, join
 
 
 class JoinTestCase(unittest.TestCase):

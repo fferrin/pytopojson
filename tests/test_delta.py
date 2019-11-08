@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import delta
+from pytopojson import delta
 
 
 class DeltaTestCase(unittest.TestCase):

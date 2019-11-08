@@ -1,5 +1,5 @@
 
-from topojson.join import Join
+from pytopojson.join import Join
 
 
 class Cut(object):

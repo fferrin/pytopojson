@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import cut, extract
+from pytopojson import cut, extract
 
 
 class CutTestCase(unittest.TestCase):

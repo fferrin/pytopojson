@@ -1,7 +1,7 @@
 
-from topojson.hash.point import hash as hash_point
-from topojson.hash.point import equal as equal_point
-from topojson.hash.hash import HashMap
+from pytopojson.hash.point import hash as hash_point
+from pytopojson.hash.point import equal as equal_point
+from pytopojson.hash.hash import HashMap
 
 
 class Dedup(object):

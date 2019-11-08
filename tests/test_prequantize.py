@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import prequantize
+from pytopojson import prequantize
 
 
 class PrequantizeTestCase(unittest.TestCase):

@@ -1,6 +1,6 @@
 import math
 
-from topojson.commons import Array
+from pytopojson.commons import Array
 
 
 class HashMap(object):

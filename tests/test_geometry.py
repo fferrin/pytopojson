@@ -6,7 +6,7 @@ import unittest
 # Third-party imports
 
 # Application-specific imports
-from topojson import geometry
+from pytopojson import geometry
 
 
 class GeometryTestCase(unittest.TestCase):

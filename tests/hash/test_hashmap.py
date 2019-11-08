@@ -7,7 +7,7 @@
 # Application-specific imports
 import unittest
 
-from topojson.hash.hash import HashMap
+from pytopojson.hash.hash import HashMap
 
 
 def equal(a, b):

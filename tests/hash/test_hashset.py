@@ -1,7 +1,7 @@
 import unittest
 
 from tests.hash.test_hashmap import equal, hash
-from topojson.hash.hash import HashSet
+from pytopojson.hash.hash import HashSet
 
 
 def equal(a, b):

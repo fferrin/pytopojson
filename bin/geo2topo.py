@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 # Third-party imports
 
 # Application-specific imports
-from topojson import topology
+from pytopojson import topology
 
 
 def read(specifiers):
