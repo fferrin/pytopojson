@@ -13,6 +13,9 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from pytopojson import topology
 
 
+__version__ = '0.0.1'
+
+
 def read(specifiers):
     objs = dict()
 
@@ -59,13 +62,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Converts GeoJSON features to TopoJSON objects.')
 
     parser.add_argument('-o', '--out', dest='file',
-                        help='output file name; defaults to “-” for stdout', default='-')
+                        help='output file name; defaults to “-” for stdout',
+                        default='-')
     # parser.add_argument('-n', '--newline-delimited',
     #                     help='accept newline-delimited JSON')
     parser.add_argument('-q', '--quantization', dest='count', type=float,
-                        help='pre-quantization parameter; 0 disables quantization', default=0)
+                        help='pre-quantization parameter; 0 disables quantization',
+                        default=0)
     parser.add_argument('geojsons', metavar='[name=]file', type=str, nargs='+',
                         help='file with GeoJSON data')
+    parser.add_argument('-v', '--version', action='version',
+                        version=f'%(prog)s v{__version__}')
 
     # Parse and store the command-line arguments in dictionary
     opts = parser.parse_args()
