@@ -42,7 +42,7 @@ class FeatureTestCase(unittest.TestCase):
 
     def test_feature_the_geometry_type_is_preserved(self):
         t = self.simple_topology({'type': 'Polygon', 'arcs': [[0]]})
-        self.assertEquals(
+        self.assertEqual(
             self.feature(t, t['objects']['foo'])['geometry']['type'],
             'Polygon'
         )
@@ -279,7 +279,7 @@ class FeatureTestCase(unittest.TestCase):
             "type": "Polygon",
             "arcs": [[0]]
         })
-        self.assertEquals("foo", self.feature(t, t['objects']['foo'])['id'])
+        self.assertEqual("foo", self.feature(t, t['objects']['foo'])['id'])
 
     def test_feature_any_object_properties_are_promoted_to_feature_properties(self):
         t = self.simple_topology({
