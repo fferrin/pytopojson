@@ -31,29 +31,31 @@ class Stitch(object):
             e = self.ends(i)
             start, end = tuple(e[0]), tuple(e[1])
 
-            f = self.fragment_by_end.get(start, None)
-            if f is not None:
+            if start in self.fragment_by_start:
+                f = self.fragment_by_end[start]
                 self.fragment_by_end.pop(f['end'], None)
                 idx = sorted(list(filter(lambda x: isinstance(x, int), f.keys())))[-1] + 1
                 f[idx] = i
                 f['end'] = end
 
-                g = self.fragment_by_start.get(end, None)
-                if g is not None:
-                    self.fragment_by_start.pop(start, None)
+                # g = self.fragment_by_start.get(end, None)
+                # if g is not None:
+                if end in self.fragment_by_start:
+                    g = self.fragment_by_start[end]
+                    self.fragment_by_start.pop(g['start'], None)
                     fg = f if g == f else f + g
                     fg['start'] = f['start']
                     fg['end'] = g['end']
                     self.fragment_by_start[fg['start']] = fg
-                    self.fragment_by_end[g['end']] = fg
+                    self.fragment_by_end[fg['end']] = fg
                 else:
-                    self.fragment_by_start[f['start']] = fg
+                    self.fragment_by_start[f['start']] = f
                     self.fragment_by_end[f['end']] = f
             else:
-                f = self.fragment_by_start.get(end, None)
-                if f is not None:
+                if end in self.fragment_by_start:
+                    f = self.fragment_by_start[end]
                     self.fragment_by_start.pop(f['start'], None)
-                    f = i + f
+                    self.unshift(f, i)
                     f['start'] = start
                     g = self.fragment_by_end.get(start, None)
                     if g is not None:
@@ -64,7 +66,7 @@ class Stitch(object):
                         self.fragment_by_start[gf['start']] = gf
                         self.fragment_by_end[gf['end']] = gf
                     else:
-                        self.fragment_by_start[f['start']] = g
+                        self.fragment_by_start[f['start']] = f
                         self.fragment_by_end[f['end']] = f
                 else:
                     f = {
@@ -97,12 +99,21 @@ class Stitch(object):
     def _get_idx(i):
         return ~i if i < 0 else i
 
+    @staticmethod
+    def unshift(d, value):
+        sorted_keys = sorted(list(filter(lambda x: isinstance(x, int),
+                                         d.keys())),
+                             reverse=True)
+        for k in sorted_keys:
+            d[k + 1] = d[k]
+        d[0] = value
+
     def ends(self, i):
         idx = self._get_idx(i)
         arc = self.topology['arcs'][idx]
         p_0 = arc[0]
 
-        if self.topology.get('transform', None) is not None:
+        if 'transform' in self.topology:
             p_1 = [0, 0]
             for dp in arc:
                 p_1[0] += dp[0]
@@ -118,6 +129,5 @@ class Stitch(object):
             f.pop('start', None)
             f.pop('end', None)
             for _, i in f.items():
-                idx = ~i if i < 0 else i
-                self.stitched_arcs[idx] = 1
+                self.stitched_arcs[self._get_idx(i)] = 1
             self.fragments.append(f)
