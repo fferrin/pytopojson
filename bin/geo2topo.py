@@ -29,9 +29,7 @@ def read(specifiers):
             name, _ = os.path.splitext(filename)
 
         if name in objs:
-            print()
-            print(f'  error: object {name} is not unique')
-            print()
+            print(f'\n  error: object {name} is not unique\n')
 
         else:
             objs[name] = read_object(file)
