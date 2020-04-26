@@ -31,7 +31,7 @@ class Stitch(object):
             e = self.ends(i)
             start, end = tuple(e[0]), tuple(e[1])
 
-            if start in self.fragment_by_start:
+            if start in self.fragment_by_end:
                 f = self.fragment_by_end[start]
                 self.fragment_by_end.pop(f['end'], None)
                 idx = sorted(list(filter(lambda x: isinstance(x, int), f.keys())))[-1] + 1
@@ -82,14 +82,14 @@ class Stitch(object):
 
         for i in arcs:
             idx = self._get_idx(i)
-            if self.stitched_arcs.get(idx, None) is None:
+            if idx not in self.stitched_arcs:
                 self.fragments.append([i])
 
         # Convert dict to list
         fragments = list()
         for f in self.fragments:
-            if f.get(1, None) is not None:
-                fragments.append([f[0], f.get(1, 0)])
+            if 1 in f:
+                fragments.append([f[0], f[1]])
             else:
                 fragments.append([f[0]])
 
@@ -101,9 +101,10 @@ class Stitch(object):
 
     @staticmethod
     def unshift(d, value):
-        sorted_keys = sorted(list(filter(lambda x: isinstance(x, int),
-                                         d.keys())),
-                             reverse=True)
+        sorted_keys = sorted(
+            list(
+                filter(lambda x: isinstance(x, int),d.keys())
+            ), reverse=True)
         for k in sorted_keys:
             d[k + 1] = d[k]
         d[0] = value
