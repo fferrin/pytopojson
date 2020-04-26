@@ -39,7 +39,7 @@ class MergeArcs(object):
             self.geometry(o)
 
         for polygon in self.polygons:
-            if polygon.get('_', None) is None:
+            if '_' not in polygon:
                 group = list()
                 polygon['_'] = 1
                 neighbors = [polygon]
@@ -55,21 +55,21 @@ class MergeArcs(object):
                         for arc in ring:
                             arc = ~arc if arc < 0 else arc
                             for p in self.polygons_by_arc[arc]:
-                                if p.get('_', None) is None:
+                                if '_' not in p:
                                     p['_'] = 1
                                     neighbors.append(p)
 
                     polygon = neighbors.pop() if any(neighbors) else False
 
                 for idx, point in enumerate(group):
-                    if point.get(1, None) is not None:
+                    if 1 in point:
                         group[idx] = [point[0], point[1]]
                     else:
                         group[idx] = [point[0]]
                 self.groups.append(group)
 
         for idx, polygon in enumerate(self.polygons):
-            if polygon.get(1, None) is not None:
+            if 1 in polygon:
                 self.polygons[idx] = [polygon[0], polygon[1]]
             else:
                 self.polygons[idx] = [polygon[0]]
@@ -132,7 +132,7 @@ class MergeArcs(object):
             for i in range(1, len(arcs)):
                 k_i = self.area(arcs[i])
                 if k < k_i:
-                    arcs[0], arcs[1] = arcs[1], arcs[0]
+                    arcs[0], arcs[i] = arcs[i], arcs[0]
                     k = k_i
 
         return list(filter(lambda x: 0 < len(x), arcs))
