@@ -12,7 +12,7 @@ class Array(object):
             self.size = 0
 
     def __getitem__(self, key):
-        if key < self.size:
+        if isinstance(key, slice) or key < self.size:
             return self.list[key]
         else:
             return None
