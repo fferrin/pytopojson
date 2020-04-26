@@ -33,17 +33,17 @@ class BBoxTestCase(unittest.TestCase):
         )
 
     def test_bbox_topology_computes_the_bbox_for_a_quantized_topology_if_missing(self):
-        topology = self._load_json_file('tests/topojson/polygon-q1e4.json')
+        topology = self._load_json_file('tests/client/topojson/polygon-q1e4.json')
         self.assertListEqual(self.bbox(topology), [0, 0, 10, 10])
 
     def test_bbox_topology_computes_the_bbox_for_a_non_quantized_topology_if_missing(self):
-        topology = self._load_json_file('tests/topojson/polygon-no-quantization.json')
+        topology = self._load_json_file('tests/client/topojson/polygon.json')
         self.assertListEqual(self.bbox(topology), [0, 0, 10, 10])
 
     def test_bbox_topology_considers_points(self):
-        topology = self._load_json_file('tests/topojson/point.json')
+        topology = self._load_json_file('tests/client/topojson/point.json')
         self.assertListEqual(self.bbox(topology), [0, 0, 10, 10])
 
     def test_bbox_topology_considers_multipoints(self):
-        topology = self._load_json_file('tests/topojson/points.json')
+        topology = self._load_json_file('tests/client/topojson/points.json')
         self.assertListEqual(self.bbox(topology), [0, 0, 10, 10])
