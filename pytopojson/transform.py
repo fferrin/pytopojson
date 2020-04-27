@@ -16,9 +16,6 @@ class Transform(object):
         self.d_x, self.d_y = 0, 0
 
     def __call__(self, transform=None, *args, **kwargs):
-        # self.x_0, self.y_0 = 0, 0
-        # self.k_x, self.k_y = 0, 0
-        # self.d_x, self.d_y = 0, 0
         if transform is None:
             return self.identity
 
