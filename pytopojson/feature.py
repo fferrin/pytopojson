@@ -1,13 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Standard library imports
-
-# Third-party imports
-
-# Application-specific imports
-from pytopojson import (
-    transform,
-)
+from pytopojson import transform
 
 
 class Reverse(object):
@@ -33,8 +24,8 @@ class Object(object):
         self.arcs = None
 
     def __call__(self, topology, o, *args, **kwargs):
-        self.transform_point = self.transform(topology.get('transform', None))
-        self.arcs = topology['arcs']
+        self.transform_point = self.transform(topology.get("transform", None))
+        self.arcs = topology["arcs"]
         return self.geometry(o)
 
     def arc(self, i, points):
@@ -44,7 +35,7 @@ class Object(object):
         idx = ~i if i < 0 else i
         arcs = self.arcs[idx]
         for k, arc in enumerate(arcs):
-            points.append(self.transform_point(arc,  k))
+            points.append(self.transform_point(arc, k))
 
         if i < 0:
             self.reverse(points, len(arcs))
@@ -74,32 +65,29 @@ class Object(object):
         return list(map(lambda x: self.ring(x), arcs))
 
     def geometry(self, o):
-        _type = o.get('type', None)
+        _type = o.get("type", None)
 
-        if _type == 'GeometryCollection':
+        if _type == "GeometryCollection":
             return {
-                'type': _type,
-                'geometries': list(map(lambda x: self.geometry(x), o['geometries']))
+                "type": _type,
+                "geometries": list(map(lambda x: self.geometry(x), o["geometries"])),
             }
-        elif _type == 'Point':
-            coordinates = self.point(o['coordinates'])
-        elif _type == 'MultiPoint':
-            coordinates = list(map(lambda x: self.point(x), o['coordinates']))
-        elif _type == 'LineString':
-            coordinates = self.line(o['arcs'])
-        elif _type == 'MultiLineString':
-            coordinates = list(map(lambda x: self.line(x), o['arcs']))
-        elif _type == 'Polygon':
-            coordinates = self.polygon(o['arcs'])
-        elif _type == 'MultiPolygon':
-            coordinates = list(map(lambda x: self.polygon(x), o['arcs']))
+        elif _type == "Point":
+            coordinates = self.point(o["coordinates"])
+        elif _type == "MultiPoint":
+            coordinates = list(map(lambda x: self.point(x), o["coordinates"]))
+        elif _type == "LineString":
+            coordinates = self.line(o["arcs"])
+        elif _type == "MultiLineString":
+            coordinates = list(map(lambda x: self.line(x), o["arcs"]))
+        elif _type == "Polygon":
+            coordinates = self.polygon(o["arcs"])
+        elif _type == "MultiPolygon":
+            coordinates = list(map(lambda x: self.polygon(x), o["arcs"]))
         else:
             return None
 
-        return {
-            'type': _type,
-            'coordinates': coordinates
-        }
+        return {"type": _type, "coordinates": coordinates}
 
 
 class Feature(object):
@@ -110,26 +98,27 @@ class Feature(object):
 
     def __call__(self, topology, o, *args, **kwargs):
         if isinstance(o, str):
-            o = topology['objects'][o]
-        if o.get('type', None) == 'GeometryCollection':
+            o = topology["objects"][o]
+        if o.get("type", None) == "GeometryCollection":
             return {
-                'type': 'FeatureCollection',
-                'features': list(map(lambda x: self.feature(topology, x),
-                                     o['geometries']))
+                "type": "FeatureCollection",
+                "features": list(
+                    map(lambda x: self.feature(topology, x), o["geometries"])
+                ),
             }
         else:
             return self.feature(topology, o)
 
     def feature(self, topology, o):
         feat = {
-            'id': o.get('id', None),
-            'bbox': o.get('bbox', None),
-            'type': 'Feature',
-            'properties': o.get('properties', dict()),
-            'geometry': self.object(topology, o)
+            "id": o.get("id", None),
+            "bbox": o.get("bbox", None),
+            "type": "Feature",
+            "properties": o.get("properties", dict()),
+            "geometry": self.object(topology, o),
         }
 
-        for k in ('id', 'bbox'):
+        for k in ("id", "bbox"):
             if feat[k] is None:
                 del feat[k]
 

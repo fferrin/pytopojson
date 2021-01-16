@@ -1,4 +1,3 @@
-
 import numpy as np
 
 
@@ -25,10 +24,14 @@ class Array(object):
         return self.size
 
     def __repr__(self):
-        return '{classname}({list_obj})'.format(classname=self.__class__.__name__, list_obj=self.list.__repr__())
+        return "{classname}({list_obj})".format(
+            classname=self.__class__.__name__, list_obj=self.list.__repr__()
+        )
 
     def __str__(self):
-        return '{classname}({list_obj})'.format(classname=self.__class__.__name__, list_obj=self.list.__str__())
+        return "{classname}({list_obj})".format(
+            classname=self.__class__.__name__, list_obj=self.list.__str__()
+        )
 
     @staticmethod
     def _convert(value):
@@ -113,7 +116,7 @@ class ListDict(dict):
         return self.values()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     a = Int8Array(5)
     print(a)
     a[3] = 2387

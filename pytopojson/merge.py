@@ -1,14 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Standard library imports
-
-# Third-party imports
-
-# Application-specific imports
-from pytopojson import (
-    feature,
-    stitch
-)
+from pytopojson import feature, stitch
 
 
 def planar_ring_area(ring):
@@ -20,7 +10,7 @@ def planar_ring_area(ring):
         a, b = b, ring[i]
         area += a[0] * b[1] - a[1] * b[0]
         i += 1
-    return abs(area)     # Note: Doubled area!
+    return abs(area)  # Note: Doubled area!
 
 
 class MergeArcs(object):
@@ -39,9 +29,9 @@ class MergeArcs(object):
             self.geometry(o)
 
         for polygon in self.polygons:
-            if '_' not in polygon:
+            if "_" not in polygon:
                 group = list()
-                polygon['_'] = 1
+                polygon["_"] = 1
                 neighbors = [polygon]
                 polygon = neighbors.pop() if any(neighbors) else False
 
@@ -55,8 +45,8 @@ class MergeArcs(object):
                         for arc in ring:
                             arc = ~arc if arc < 0 else arc
                             for p in self.polygons_by_arc[arc]:
-                                if '_' not in p:
-                                    p['_'] = 1
+                                if "_" not in p:
+                                    p["_"] = 1
                                     neighbors.append(p)
 
                     polygon = neighbors.pop() if any(neighbors) else False
@@ -76,22 +66,22 @@ class MergeArcs(object):
 
         for i, _ in self.polygons_by_arc.items():
             for ii, _ in enumerate(self.polygons_by_arc[i]):
-                self.polygons_by_arc[i][ii].pop('_', None)
+                self.polygons_by_arc[i][ii].pop("_", None)
 
         return {
-            'type': 'MultiPolygon',
-            'arcs': list(map(lambda x: self._tmp(x), self.groups))
+            "type": "MultiPolygon",
+            "arcs": list(map(lambda x: self._tmp(x), self.groups)),
         }
 
     def geometry(self, o):
-        _type = o['type']
-        if _type == 'GeometryCollection':
-            for arc in o['geometries']:
+        _type = o["type"]
+        if _type == "GeometryCollection":
+            for arc in o["geometries"]:
                 self.geometry(arc)
-        elif _type == 'Polygon':
-            self.extract(o['arcs'])
-        elif _type == 'MultiPolygon':
-            for arc in o['arcs']:
+        elif _type == "Polygon":
+            self.extract(o["arcs"])
+        elif _type == "MultiPolygon":
+            for arc in o["arcs"]:
                 self.extract(arc)
 
     def extract(self, polygon):
@@ -108,8 +98,8 @@ class MergeArcs(object):
         self.polygons.append(p)
 
     def area(self, ring):
-        obj = self.object(self.topology, {'type': 'Polygon', 'arcs': [ring]})
-        return planar_ring_area(obj['coordinates'][0])
+        obj = self.object(self.topology, {"type": "Polygon", "arcs": [ring]})
+        return planar_ring_area(obj["coordinates"][0])
 
     def _tmp(self, polygons):
         arcs = list()

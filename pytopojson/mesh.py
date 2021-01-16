@@ -1,15 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Standard library imports
-
-# Third-party imports
-
-# Application-specific imports
-from pytopojson import (
-    commons,
-    feature,
-    stitch
-)
+from pytopojson import commons, feature, stitch
 
 
 class ExtractArcs(object):
@@ -23,19 +12,16 @@ class ExtractArcs(object):
 
         for geoms in self.geoms_by_arc:
             if filter is None:
-                self.arcs.append(geoms[0]['i'])
+                self.arcs.append(geoms[0]["i"])
             else:
-                if filter(geoms[0]['g'], geoms[-1]['g']):
-                    self.arcs.append(geoms[0]['i'])
+                if filter(geoms[0]["g"], geoms[-1]["g"]):
+                    self.arcs.append(geoms[0]["i"])
 
         return self.arcs
 
     def extract_0(self, i):
         j = ~i if i < 0 else i
-        self.geoms_by_arc.get(j, []).append({
-            'i': i,
-            'g': self.geom
-        })
+        self.geoms_by_arc.get(j, []).append({"i": i, "g": self.geom})
 
     def extract_1(self, arcs):
         for arc in arcs:
@@ -51,16 +37,16 @@ class ExtractArcs(object):
 
     def geometry(self, o):
         self.geom = o
-        _type = o['type']
-        if _type == 'GeometryCollection':
-            for g in o['geometries']:
+        _type = o["type"]
+        if _type == "GeometryCollection":
+            for g in o["geometries"]:
                 self.geometry(g)
-        elif _type == 'LineString':
-            self.extract_1(o['arcs'])
-        elif _type == 'MultiLineString' or _type == 'Polygon':
-            self.extract_2(o['arcs'])
-        elif _type == 'MultiPolygon':
-            self.extract_3(o['arcs'])
+        elif _type == "LineString":
+            self.extract_1(o["arcs"])
+        elif _type == "MultiLineString" or _type == "Polygon":
+            self.extract_2(o["arcs"])
+        elif _type == "MultiPolygon":
+            self.extract_3(o["arcs"])
 
 
 class MeshArcs(object):
@@ -72,12 +58,9 @@ class MeshArcs(object):
         if obj is not None and filt is not None:
             arcs = self.extract_arcs(topology, obj, filt)
         else:
-            n = len(topology['arcs'])
+            n = len(topology["arcs"])
             arcs = [i for i in range(n)]
-        return {
-            'type': 'MultiLineString',
-            'arcs': self.stitch(topology, arcs)
-        }
+        return {"type": "MultiLineString", "arcs": self.stitch(topology, arcs)}
 
 
 class Mesh(object):

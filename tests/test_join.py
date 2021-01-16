@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
-
-# Standard library imports
 import unittest
 
-# Third-party imports
-
-# Application-specific imports
-from pytopojson import extract, join
+from pytopojson import (
+    extract,
+    join,
+)
 
 
 class JoinTestCase(unittest.TestCase):

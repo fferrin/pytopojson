@@ -4,11 +4,13 @@ from pytopojson.commons import Array
 
 
 class HashMap(object):
-    def __init__(self, size, hash, equal, key_type=Array, key_empty=None, value_type=Array):
+    def __init__(
+        self, size, hash, equal, key_type=Array, key_empty=None, value_type=Array
+    ):
         self.hash = hash
         self.equal = equal
         self.key_empty = key_empty
-        self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
+        self.size = 1 << max(4, int(math.ceil(math.log(size + 1e-9) / math.log(2))))
         self.key_store = key_type(self.size)
         self.val_store = value_type(self.size)
         self.mask = self.size - 1
@@ -17,10 +19,10 @@ class HashMap(object):
             self.key_store[i] = key_empty
 
         self.value = {
-            'set': self.set,
-            'maybeSet': self.maybe_set,
-            'get': self.get,
-            'keys': self.keys
+            "set": self.set,
+            "maybeSet": self.maybe_set,
+            "get": self.get,
+            "keys": self.keys,
         }
 
     def set(self, key, value):
@@ -36,7 +38,7 @@ class HashMap(object):
             collisions += 1
 
             if self.size <= collisions:
-                raise ValueError('Full HashMap')
+                raise ValueError("Full HashMap")
 
             index = (index + 1) & self.mask
             match_key = self.key_store[index]
@@ -56,7 +58,7 @@ class HashMap(object):
 
             collisions += 1
             if self.size <= collisions:
-                raise ValueError('Full HashMap')
+                raise ValueError("Full HashMap")
 
             index = (index + 1) & self.mask
             match_key = self.key_store[index]
@@ -98,7 +100,7 @@ class HashMap(object):
 
 class HashSet(object):
     def __init__(self, size, hash, equal, type=Array, empty=None):
-        self.size = 1 << max(4, int(math.ceil(math.log(size + 1E-9) / math.log(2))))
+        self.size = 1 << max(4, int(math.ceil(math.log(size + 1e-9) / math.log(2))))
         self.hash = hash
         self.equal = equal
         self.empty = empty
@@ -108,11 +110,7 @@ class HashSet(object):
         for i in range(self.size):
             self.store[i] = empty
 
-        self.value = {
-            'add': self.add,
-            'has': self.has,
-            'values': self.values
-        }
+        self.value = {"add": self.add, "has": self.has, "values": self.values}
 
     def add(self, value):
         index = self.hash(value) & self.mask
@@ -163,6 +161,3 @@ class HashSet(object):
             i += 1
 
         return values
-
-
-

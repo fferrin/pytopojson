@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
-
-# Standard library imports
 import unittest
 
-# Third-party imports
-
-# Application-specific imports
 from pytopojson import topology
 
 
@@ -14,48 +8,46 @@ class TopologyTestCase(unittest.TestCase):
         self.topology = topology.Topology()
 
     def test_topology_exact_duplicate_lines_abc_abc_share_the_arc_abc(self):
-        topology = self.topology({
-            "foo": {
-                "type": "LineString",
-                "coordinates": [[0, 0], [1, 0], [2, 0]]
-            },
-            "bar": {
-                "type": "LineString",
-                "coordinates": [[0, 0], [1, 0], [2, 0]]
-            },
-        })
+        topology = self.topology(
+            {
+                "foo": {"type": "LineString", "coordinates": [[0, 0], [1, 0], [2, 0]]},
+                "bar": {"type": "LineString", "coordinates": [[0, 0], [1, 0], [2, 0]]},
+            }
+        )
 
-        self.assertDictEqual({
-            "type": "Topology",
-            "bbox": [0, 0, 2, 0],
-            "arcs": [[[0, 0], [1, 0], [2, 0]]],
-            "objects": {
-                "foo": {"type": "LineString", "arcs": [0]},
-                "bar": {"type": "LineString", "arcs": [0]},
+        self.assertDictEqual(
+            {
+                "type": "Topology",
+                "bbox": [0, 0, 2, 0],
+                "arcs": [[[0, 0], [1, 0], [2, 0]]],
+                "objects": {
+                    "foo": {"type": "LineString", "arcs": [0]},
+                    "bar": {"type": "LineString", "arcs": [0]},
+                },
             },
-        }, topology)
+            topology,
+        )
 
     def test_topology_reversed_duplicate_lines_abc_cba_share_the_arc_abc(self):
-        topology = self.topology({
-            "foo": {
-                "type": "LineString",
-                "coordinates": [[0, 0], [1, 0], [2, 0]]
-            },
-            "bar": {
-                "type": "LineString",
-                "coordinates": [[2, 0], [1, 0], [0, 0]]
-            },
-        })
+        topology = self.topology(
+            {
+                "foo": {"type": "LineString", "coordinates": [[0, 0], [1, 0], [2, 0]]},
+                "bar": {"type": "LineString", "coordinates": [[2, 0], [1, 0], [0, 0]]},
+            }
+        )
 
-        self.assertDictEqual({
-            "type": "Topology",
-            "bbox": [0, 0, 2, 0],
-            "arcs": [[[0, 0], [1, 0], [2, 0]]],
-            "objects": {
-                "foo": {"type": "LineString", "arcs": [0]},
-                "bar": {"type": "LineString", "arcs": [~0]},
+        self.assertDictEqual(
+            {
+                "type": "Topology",
+                "bbox": [0, 0, 2, 0],
+                "arcs": [[[0, 0], [1, 0], [2, 0]]],
+                "objects": {
+                    "foo": {"type": "LineString", "arcs": [0]},
+                    "bar": {"type": "LineString", "arcs": [~0]},
+                },
             },
-        }, topology)
+            topology,
+        )
 
     def test_topology_when_old_arc_abc_extends_a_new_arc_ab_they_share_the_arc_ab(
         self,
@@ -2269,10 +2261,10 @@ class TopologyTestCase(unittest.TestCase):
 
     def test_topology_the_polygon_bcdb_and_the_line_string_abe_share_three_arcs(self):
         r"""
-            C-----D
-             \   /
-              \ /
-         A-----B-----E
+           C-----D
+            \   /
+             \ /
+        A-----B-----E
         """
         topology = self.topology(
             {

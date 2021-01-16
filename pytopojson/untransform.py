@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Standard library imports
-
-# Third-party imports
-
-# Application-specific imports
 from pytopojson import identity
 
 
@@ -22,8 +15,8 @@ class Untransform(object):
         if transform is None:
             return self.identity
 
-        self.k_x, self.k_y = transform['scale']
-        self.d_x, self.d_y = transform['translate']
+        self.k_x, self.k_y = transform["scale"]
+        self.d_x, self.d_y = transform["translate"]
 
         return self.func
 

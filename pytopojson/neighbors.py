@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Standard library imports
-
-# Third-party imports
-
-# Application-specific imports
 from pytopojson import bisect
 
 
@@ -14,14 +7,14 @@ class Neighbors(object):
         self.indexes_by_arc = None
         self.neighbors = None
         self.geometry_type = {
-            'LineString': self.line,
-            'MultiLineString': self.polygon,
-            'Polygon': self.polygon,
-            'MultiPolygon': self.multipolygon,
+            "LineString": self.line,
+            "MultiLineString": self.polygon,
+            "Polygon": self.polygon,
+            "MultiPolygon": self.multipolygon,
         }
 
     def __call__(self, objects, *args, **kwargs):
-        self.indexes_by_arc = dict()   # Arc index -> array of object indexes
+        self.indexes_by_arc = dict()  # Arc index -> array of object indexes
         self.neighbors = [[] for _ in objects]
 
         for idx, o in enumerate(objects):
@@ -65,8 +58,8 @@ class Neighbors(object):
             self.polygon(arc, i)
 
     def geometry(self, o, i):
-        if o['type'] == 'GeometryCollection':
-            for geom in o['geometries']:
+        if o["type"] == "GeometryCollection":
+            for geom in o["geometries"]:
                 self.geometry(geom, i)
-        elif o['type'] in self.geometry_type.keys():
-            self.geometry_type[o['type']](o['arcs'], i)
+        elif o["type"] in self.geometry_type.keys():
+            self.geometry_type[o["type"]](o["arcs"], i)

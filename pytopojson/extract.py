@@ -1,5 +1,3 @@
-
-
 class Extract(object):
     """
     Extracts the lines and rings from the specified hash of geometry objects.
@@ -26,11 +24,11 @@ class Extract(object):
 
     def __call__(self, objects, *args, **kwargs):
         self.extract_geometry_type = {
-            'GeometryCollection': self._geometry_collection_call,
-            'LineString': self._line_string_call,
-            'MultiLineString': self._multi_line_string_call,
-            'Polygon': self._polygon_call,
-            'MultiPolygon': self._multi_polygon_call
+            "GeometryCollection": self._geometry_collection_call,
+            "LineString": self._line_string_call,
+            "MultiLineString": self._multi_line_string_call,
+            "Polygon": self._polygon_call,
+            "MultiPolygon": self._multi_polygon_call,
         }
 
         self.index = 0
@@ -42,32 +40,32 @@ class Extract(object):
             self.extract_geometry(objects[k])
 
         return {
-            'type': 'Topology',
-            'coordinates': self.coordinates,
-            'lines': self.lines,
-            'rings': self.rings,
-            'objects': objects
+            "type": "Topology",
+            "coordinates": self.coordinates,
+            "lines": self.lines,
+            "rings": self.rings,
+            "objects": objects,
         }
 
     def _line_string_call(self, o):
-        o['arcs'] = self.extract_line(o['arcs'])
+        o["arcs"] = self.extract_line(o["arcs"])
 
     def _multi_line_string_call(self, o):
-        o['arcs'] = list(map(self.extract_line, o['arcs']))
+        o["arcs"] = list(map(self.extract_line, o["arcs"]))
 
     def _polygon_call(self, o):
-        o['arcs'] = list(map(self.extract_ring, o['arcs']))
+        o["arcs"] = list(map(self.extract_ring, o["arcs"]))
 
     def _multi_polygon_call(self, o):
-        o['arcs'] = list(map(self.extract_multi_ring, o['arcs']))
+        o["arcs"] = list(map(self.extract_multi_ring, o["arcs"]))
 
     def _geometry_collection_call(self, o):
-        for geometry in o['geometries']:
+        for geometry in o["geometries"]:
             self.extract_geometry(geometry)
 
     def extract_geometry(self, geometry):
-        if geometry and geometry['type'] in self.extract_geometry_type:
-            self.extract_geometry_type[geometry['type']](geometry)
+        if geometry and geometry["type"] in self.extract_geometry_type:
+            self.extract_geometry_type[geometry["type"]](geometry)
 
     def extract(self, geometry, append_to):
         i = 0

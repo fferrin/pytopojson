@@ -1,4 +1,3 @@
-
 from pytopojson.hash.point import hash as hash_point
 from pytopojson.hash.point import equal as equal_point
 from pytopojson.hash.hash import HashMap
@@ -13,25 +12,25 @@ class Dedup(object):
         pass
 
     def __call__(self, topology, *args, **kwargs):
-        self.coordinates = topology['coordinates']
-        self.lines = topology['lines'].copy()
-        self.rings = topology['rings'].copy()
+        self.coordinates = topology["coordinates"]
+        self.lines = topology["lines"].copy()
+        self.rings = topology["rings"].copy()
         self.arc_count = len(self.lines) + len(self.rings)
 
-        topology.pop('lines', None)
-        topology.pop('rings', None)
+        topology.pop("lines", None)
+        topology.pop("rings", None)
 
         for l in self.lines:
             line = l
-            while line.get('next', False):
+            while line.get("next", False):
                 self.arc_count += 1
-                line = line['next']
+                line = line["next"]
 
         for r in self.rings:
             ring = r
-            while ring.get('next', False):
+            while ring.get("next", False):
                 self.arc_count += 1
-                ring = ring['next']
+                ring = ring["next"]
 
         self.arcs_by_end = HashMap(self.arc_count * 2 * 1.4, hash_point, equal_point)
         self.arcs = list()
@@ -41,20 +40,20 @@ class Dedup(object):
 
             while line:
                 self.dedup_line(line)
-                line = line.get('next', False)
+                line = line.get("next", False)
 
         for r in self.rings:
             ring = r
             # arc is no longer closed
 
-            if ring.get('next', False):
+            if ring.get("next", False):
                 while ring:
                     self.dedup_line(ring)
-                    ring = ring.get('next', False)
+                    ring = ring.get("next", False)
             else:
                 self.dedup_ring(ring)
 
-        topology['arcs'] = self.arcs.copy()
+        topology["arcs"] = self.arcs.copy()
         return topology
 
     def dedup_line(self, arc):
@@ -177,7 +176,10 @@ class Dedup(object):
         k_b = self.find_minimum_offset(arc_b)
 
         for i in range(n):
-            if not equal_point(self.coordinates[i_a + (i + k_a) % n], self.coordinates[i_b + (i + k_b) % n]):
+            if not equal_point(
+                self.coordinates[i_a + (i + k_a) % n],
+                self.coordinates[i_b + (i + k_b) % n],
+            ):
                 return False
 
         return True
@@ -194,7 +196,10 @@ class Dedup(object):
         k_b = n - self.find_minimum_offset(arc_b)
 
         for i in range(n):
-            if not equal_point(self.coordinates[i_a + (i + k_a) % n], self.coordinates[j_b - (i + k_b) % n]):
+            if not equal_point(
+                self.coordinates[i_a + (i + k_a) % n],
+                self.coordinates[j_b - (i + k_b) % n],
+            ):
                 return False
 
         return True
@@ -211,7 +216,11 @@ class Dedup(object):
         while mid < end:
             point = self.coordinates[mid]
 
-            if point[0] < minimum_point[0] or point[0] == minimum_point[0] and point[1] < minimum_point[1]:
+            if (
+                point[0] < minimum_point[0]
+                or point[0] == minimum_point[0]
+                and point[1] < minimum_point[1]
+            ):
                 minimum = mid
                 minimum_point = point
 

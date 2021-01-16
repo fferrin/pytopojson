@@ -1,4 +1,3 @@
-
 from pytopojson.hash.hash import HashMap, HashSet
 from pytopojson.hash.point import equal as equal_point
 from pytopojson.hash.point import hash as hash_point
@@ -28,9 +27,9 @@ class Join(object):
         pass
 
     def __call__(self, topology, *args, **kwargs):
-        self.coordinates = topology['coordinates']
-        self.lines = topology['lines']
-        self.rings = topology['rings']
+        self.coordinates = topology["coordinates"]
+        self.lines = topology["lines"]
+        self.rings = topology["rings"]
         self.indexes = self.index()
         self.visited_by_index = Int32Array(len(self.coordinates))
         self.left_by_index = Int32Array(len(self.coordinates))
@@ -39,7 +38,9 @@ class Join(object):
         self.junction_count = 0
 
         for i in range(len(self.coordinates)):
-            self.visited_by_index[i] = self.left_by_index[i] = self.right_by_index[i] = -1
+            self.visited_by_index[i] = self.left_by_index[i] = self.right_by_index[
+                i
+            ] = -1
 
         for i in range(len(self.lines)):
             line = self.lines[i]
@@ -63,7 +64,6 @@ class Join(object):
             self.junction_count += 1
             self.junction_by_index[next_index] = 1
 
-        # TODO: Cambiar a una forma más compacta
         for i in range(len(self.coordinates)):
             self.visited_by_index[i] = -1
 
@@ -88,7 +88,9 @@ class Join(object):
                 ring_start += 1
 
         self.visited_by_index = self.left_by_index = self.right_by_index = None
-        self.junction_by_point = HashSet(self.junction_count * 1.4, hash_point, equal_point)
+        self.junction_by_point = HashSet(
+            self.junction_count * 1.4, hash_point, equal_point
+        )
 
         len_junction_by_index = len(self.junction_by_index)
         for i in range(len(self.coordinates)):
@@ -108,17 +110,27 @@ class Join(object):
 
         if 0 <= left_index:
             right_index = self.right_by_index[current_index]
-            if (left_index != previous_index or right_index != next_index) \
-                    and (left_index != next_index or right_index != previous_index):
+            if (left_index != previous_index or right_index != next_index) and (
+                left_index != next_index or right_index != previous_index
+            ):
                 self.junction_count += 1
                 self.junction_by_index[current_index] = 1
 
         else:
-            self.left_by_index[current_index] = 0 if previous_index is None else previous_index
+            self.left_by_index[current_index] = (
+                0 if previous_index is None else previous_index
+            )
             self.right_by_index[current_index] = 0 if next_index is None else next_index
 
     def index(self):
-        index_by_point = HashMap(len(self.coordinates) * 1.4, self.hash_index, self.equal_index, Int32Array, -1, Int32Array)
+        index_by_point = HashMap(
+            len(self.coordinates) * 1.4,
+            self.hash_index,
+            self.equal_index,
+            Int32Array,
+            -1,
+            Int32Array,
+        )
         indexes = Int32Array(len(self.coordinates))
 
         for i in range(len(self.coordinates)):
@@ -132,4 +144,3 @@ class Join(object):
 
     def equal_index(self, i, j):
         return equal_point(self.coordinates[i], self.coordinates[j])
-

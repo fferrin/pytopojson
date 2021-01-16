@@ -261,7 +261,7 @@ try [ndjson-cli](https://github.com/mbostock/ndjson-cli) as demonstrated in
 
 Output usage information.
 
-<a name="geo2topo_version" href="#geo2topo_version">#</a> geo2topo <b>-v</b>
+<a name="geo2topo_version" href="#geo2topo_version">#</a> geo2topo <b>-V</b>
 <br><a href="#geo2topo_version">#</a> geo2topo <b>--version</b>
 
 Output the version number.
@@ -274,7 +274,7 @@ Specify the output TopoJSON file name. Defaults to “-” for stdout.
 <a name="geo2topo_quantization" href="#geo2topo_quantization">#</a> geo2topo <b>-q</b> <i>count</i>
 <br><a href="#geo2topo_quantization">#</a> geo2topo <b>--quantization</b> <i>count</i>
 
-Specify a pre-quantization paramter. 0 disables quantization. See 
+Specify a pre-quantization parameter. 0 disables quantization. See 
 <a href="#topology">pytopojson.topology.Topology</a> for a description of 
 quantization.
 
@@ -313,7 +313,7 @@ To list the available object names, use [--list](#topo2geo_list).
 
 Output usage information.
 
-<a name="topo2geo_version" href="#topo2geo_version">#</a> topo2geo <b>-v</b>
+<a name="topo2geo_version" href="#topo2geo_version">#</a> topo2geo <b>-V</b>
 <br><a href="#topo2geo_version">#</a> topo2geo <b>--version</b>
 
 Output the version number.
@@ -363,7 +363,7 @@ already quantized, an error is thrown. See also
 Output usage information.
 
 <a name="topoquantize_version" href="#topoquantize_version">#</a> 
-topoquantize <b>-v</b>
+topoquantize <b>-V</b>
 <br><a href="#topoquantize_version">#</a> topoquantize <b>--version</b>
 
 Output the version number.

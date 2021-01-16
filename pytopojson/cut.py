@@ -1,4 +1,3 @@
-
 from pytopojson.join import Join
 
 
@@ -14,23 +13,23 @@ class Cut(object):
 
     def __call__(self, topology, *args, **kwargs):
         self.junctions = self.join(topology)
-        self.coordinates = topology['coordinates']
+        self.coordinates = topology["coordinates"]
         self.lines = list()
         self.rings = list()
         self.index = 0
         self.cut_geometry_type = {
-            'GeometryCollection': self._geometry_collection_call,
-            'LineString': self._line_string_call,
-            'MultiLineString': self._multi_line_string_call,
-            'Polygon': self._polygon_call,
-            'MultiPolygon': self._multi_polygon_call
+            "GeometryCollection": self._geometry_collection_call,
+            "LineString": self._line_string_call,
+            "MultiLineString": self._multi_line_string_call,
+            "Polygon": self._polygon_call,
+            "MultiPolygon": self._multi_polygon_call,
         }
 
-        for k, v in topology['objects'].items():
+        for k, v in topology["objects"].items():
             self.cut_geometry(v)
 
-        topology['lines'] = self.lines
-        topology['rings'] = self.rings
+        topology["lines"] = self.lines
+        topology["rings"] = self.rings
         return topology
 
     def rotate_array(self, array, start, end, offset):
@@ -51,19 +50,19 @@ class Cut(object):
             end -= 1
 
     def _line_string_call(self, o):
-        o['arcs'] = self.cut_line(o['arcs'])
+        o["arcs"] = self.cut_line(o["arcs"])
 
     def _multi_line_string_call(self, o):
-        o['arcs'] = list(map(self.cut_line, o['arcs']))
+        o["arcs"] = list(map(self.cut_line, o["arcs"]))
 
     def _polygon_call(self, o):
-        o['arcs'] = list(map(self.cut_ring, o['arcs']))
+        o["arcs"] = list(map(self.cut_ring, o["arcs"]))
 
     def _multi_polygon_call(self, o):
-        o['arcs'] = list(map(self.cut_multi_ring, o['arcs']))
+        o["arcs"] = list(map(self.cut_multi_ring, o["arcs"]))
 
     def _geometry_collection_call(self, o):
-        for geometry in o['geometries']:
+        for geometry in o["geometries"]:
             self.cut_geometry(geometry)
 
     def cut_line(self, line):
@@ -76,7 +75,7 @@ class Cut(object):
             if self.junctions.has(self.coordinates[line_mid]):
                 next = {0: line_mid, 1: l[1]}
                 l[1] = line_mid
-                l['next'] = next
+                l["next"] = next
                 l = next
 
             line_mid += 1
@@ -98,11 +97,13 @@ class Cut(object):
                 if ring_fixed:
                     next = {0: ring_mid, 1: r[1]}
                     r[1] = ring_mid
-                    r['next'] = next
+                    r["next"] = next
                     r = next
                 # For the first junction, we can rotate rather than cut.
                 else:
-                    self.rotate_array(self.coordinates, ring_start, ring_end, ring_end - ring_mid)
+                    self.rotate_array(
+                        self.coordinates, ring_start, ring_end, ring_end - ring_mid
+                    )
                     self.coordinates[ring_end] = self.coordinates[ring_start]
                     ring_fixed = True
                     ring_mid = ring_start
@@ -116,5 +117,5 @@ class Cut(object):
         return list(map(self.cut_ring, rings))
 
     def cut_geometry(self, geometry):
-        if geometry and geometry['type'] in self.cut_geometry_type:
-            self.cut_geometry_type[geometry['type']](geometry)
+        if geometry and geometry["type"] in self.cut_geometry_type:
+            self.cut_geometry_type[geometry["type"]](geometry)
