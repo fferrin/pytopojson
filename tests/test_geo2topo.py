@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
 
-# Standard library imports
 import json
 import subprocess
 import unittest
 
-# Third-party imports
-
-# Application-specific imports
 from tests import in_delta
 
 
@@ -38,3 +33,11 @@ class Geo2TopoTestCase(unittest.TestCase):
                       ' multipolygon=tests/server/geojson/empty-multipolygon.json'
                       ' multipolygon2=tests/server/geojson/empty-multipolygon2.json'
                       ' polygon=tests/server/geojson/empty-polygon.json')
+
+    def test_us_map(self):
+        self.geo2topo('tests/client/topojson/us-states.json',
+                      'tests/client/geojson/us-states.json')
+
+    def test_quantized_us_map(self):
+        self.geo2topo('tests/client/topojson/us-states-q1e2.json',
+                      '-q 1E2 tests/client/geojson/us-states.json')

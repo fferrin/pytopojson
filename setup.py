@@ -19,7 +19,12 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-      'numpy >= 1.15.0',
+      "numpy >= 1.15.0",
     ],
-    python_requires='>=3.7.3',
+    python_requires=">=3.7.3",
+    scripts=[
+        "bin/geo2topo.py",
+        "bin/topo2geo.py",
+        "bin/topoquantize.py",
+    ]
 )

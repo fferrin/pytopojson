@@ -28,7 +28,8 @@ class Prequantize(object):
         }
 
     def _geometry_collection_call(self, o):
-        map(self.quantize_geometry, o['geometries'])
+        for geom in o["geometries"]:
+            self.quantize_geometry(geom)
 
     def _point_call(self, o):
         o['coordinates'] = self.quantize_point(o['coordinates'])
