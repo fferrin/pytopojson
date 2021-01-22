@@ -3,12 +3,10 @@ import json
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
 from pytopojson import feature
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 def read(input_):
@@ -58,7 +56,7 @@ def write_feature(output, feat):
             dst.write("\n")
 
 
-if __name__ == "__main__":
+def main():
     # Create OptionParser object and set options
     parser = argparse.ArgumentParser(
         description="Converts TopoJSON objects to GeoJSON features."
@@ -103,3 +101,7 @@ if __name__ == "__main__":
         write_list(topology)
     else:
         write(topology, kwargs["objects"])
+
+
+if __name__ == "__main__":
+    main()
