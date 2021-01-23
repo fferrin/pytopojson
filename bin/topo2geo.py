@@ -43,7 +43,7 @@ def write(topology_, objects):
             print(f"\n  error: object {name} not found\n")
             return
 
-        write_feature(file_, feat(topology, name))
+        write_feature(file_, feat(topology_, name))
 
 
 def write_feature(output, feat):
