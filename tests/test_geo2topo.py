@@ -10,7 +10,6 @@ class Geo2TopoTestCase(unittest.TestCase):
         options = " ".join(options.split()).split(" ")
         p = subprocess.run(["python", "bin/geo2topo.py", *options], capture_output=True)
         out, err = p.stdout, p.stderr
-        print("OUTPUT:", out)
         actual = json.loads(out.decode("utf8").strip().replace("'", '"'))
         with open(output, "r") as f:
             expected = json.load(f)
