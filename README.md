@@ -43,8 +43,8 @@ from pytopojson import topology
 # Create Topology object
 topology_ = topology.Topology()
 
-# Call it using a GeoJSON (dict) object and a quantization value (optional)
-topojson = topology_(geojson, quantization=quantization)
+# Call it using a GeoJSON (dict) object, a name for the object and a quantization value (optional)
+topojson = topology_({"object_name": geojson}, quantization=quantization)
 ```
 
 This returns a TopoJSON topology for the specified 

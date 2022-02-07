@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pytopojson",
-    version="1.1.0",
+    version="1.1.1",
     author="Facundo Ferrín",
     author_email="facundo.ferrin@gmail.com",
     description="An extension to GeoJSON that encodes topology",
@@ -22,6 +22,13 @@ setuptools.setup(
         "numpy >= 1.15.0",
     ],
     python_requires=">=3.7.3",
+    entry_points={
+        "console_scripts": [
+            "geo2topo = bin.geo2topo:main",
+            "topo2geo = bin.topo2geo:main",
+            "topoquantize = bin.topoquantize:main",
+        ]
+    },
     scripts=[
         "bin/geo2topo.py",
         "bin/topo2geo.py",

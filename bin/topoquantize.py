@@ -3,12 +3,10 @@ import json
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
 from pytopojson import quantize
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 def read(input_):
@@ -44,7 +42,7 @@ def _valid_quantization_parameter(arg):
     return f
 
 
-if __name__ == "__main__":
+def main():
     # Create OptionParser object and set options
     parser = argparse.ArgumentParser(description="Quantizes TopoJSON.")
 
@@ -85,3 +83,7 @@ if __name__ == "__main__":
     topology = read(input_)
     quantized = quantize_topology(topology, kwargs["quantization"])
     write(output, quantized)
+
+
+if __name__ == "__main__":
+    main()
