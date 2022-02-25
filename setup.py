@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pytopojson",
-    version="1.1.1",
+    version="1.1.2",
     author="Facundo Ferrín",
     author_email="facundo.ferrin@gmail.com",
     description="An extension to GeoJSON that encodes topology",

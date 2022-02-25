@@ -6,7 +6,7 @@ import sys
 from pytopojson import topology
 
 
-__version__ = "0.0.2"
+__version__ = "1.1.2"
 
 
 def read(specifiers):
