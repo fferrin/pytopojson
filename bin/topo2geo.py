@@ -6,7 +6,7 @@ import sys
 from pytopojson import feature
 
 
-__version__ = "0.0.2"
+__version__ = "1.1.2"
 
 
 def read(input_):
