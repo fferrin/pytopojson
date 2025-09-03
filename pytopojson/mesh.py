@@ -1,4 +1,4 @@
-from pytopojson import commons, feature, stitch
+from pytopojson import feature, stitch
 
 
 class ExtractArcs(object):

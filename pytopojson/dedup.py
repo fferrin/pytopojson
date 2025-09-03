@@ -1,6 +1,6 @@
-from pytopojson.hash.point import hash as hash_point
-from pytopojson.hash.point import equal as equal_point
 from pytopojson.hash.hash import HashMap
+from pytopojson.hash.point import equal as equal_point
+from pytopojson.hash.point import hash as hash_point
 
 
 class Dedup(object):
