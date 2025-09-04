@@ -19,7 +19,7 @@ class MeshTestCase(unittest.TestCase):
         topology = {"type": "Topology", "objects": {}, "arcs": []}
 
         self.assertDictEqual(
-            self.mesh(topology, [{"type": None}]),
+            self.mesh(topology, {"type": None}),
             {"type": "MultiLineString", "coordinates": []},
         )
 
