@@ -51,16 +51,6 @@ class Stitch(object):
                 arcs[self.empty_index] = i
                 arcs[j] = t
 
-        # q, r = divmod(len(arcs), 10)
-        # print("[")
-        # for i in range(q):
-        #     values = arcs[10 * i: 10 * (i + 1)]
-        #     print(",".join(map(lambda x: f"{x:>6}", values)))
-        # values = arcs[10 * (i + 1): 10 * (i + 1) + r]
-        # print(",".join(map(lambda x: f"{x:>6}", values)))
-        # print("]")
-        # print(len(arcs))
-
         for i in arcs:
             start, end = self.ends(i)
             if start in self.fragment_by_end:

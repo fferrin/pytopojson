@@ -61,12 +61,6 @@ class MeshArcs(object):
             arcs = list(range(len(topology["arcs"])))
         else:
             arcs = self.extract_arcs(topology, obj, filt)
-            # q, r = divmod(len(arcs), 10)
-            # print("[")
-            # for i in range(q):
-            #     values = arcs[10 * i: 10 * (i + 1)]
-            #     print(",".join(map(lambda x: f"{x:>6}", values)))
-            # print("]")
         return {"type": "MultiLineString", "arcs": self.stitch(topology, arcs)}
 
 
