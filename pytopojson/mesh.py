@@ -1,27 +1,29 @@
-from pytopojson import commons, feature, stitch
+from pytopojson import feature, stitch
 
 
 class ExtractArcs(object):
     def __init__(self):
-        self.arcs = list()
-        self.geoms_by_arc = list()
+        self.geoms_by_arc = {}
         self.geom = None
 
-    def __call__(self, topology, object, filter, *args, **kwargs):
-        self.geometry(object)
+    def __call__(self, topology, obj, filt, *args, **kwargs):
+        arcs = []
+        self.geometry(obj)
 
-        for geoms in self.geoms_by_arc:
-            if filter is None:
-                self.arcs.append(geoms[0]["i"])
-            else:
-                if filter(geoms[0]["g"], geoms[-1]["g"]):
-                    self.arcs.append(geoms[0]["i"])
+        list_geoms = [self.geoms_by_arc[key] for key in sorted(self.geoms_by_arc)]
+        if filt is None:
+            for geoms in list_geoms:
+                arcs.append(geoms[0]["i"])
+        else:
+            for geoms in list_geoms:
+                if filt(geoms[0]["g"], geoms[-1]["g"]):
+                    arcs.append(geoms[0]["i"])
 
-        return self.arcs
+        return arcs
 
     def extract_0(self, i):
         j = ~i if i < 0 else i
-        self.geoms_by_arc.get(j, []).append({"i": i, "g": self.geom})
+        self.geoms_by_arc.setdefault(j, []).append({"i": i, "g": self.geom})
 
     def extract_1(self, arcs):
         for arc in arcs:
@@ -55,11 +57,10 @@ class MeshArcs(object):
         self.extract_arcs = ExtractArcs()
 
     def __call__(self, topology, obj=None, filt=None, *args, **kwargs):
-        if obj is not None and filt is not None:
-            arcs = self.extract_arcs(topology, obj, filt)
+        if obj is None:
+            arcs = list(range(len(topology["arcs"])))
         else:
-            n = len(topology["arcs"])
-            arcs = [i for i in range(n)]
+            arcs = self.extract_arcs(topology, obj, filt)
         return {"type": "MultiLineString", "arcs": self.stitch(topology, arcs)}
 
 
@@ -69,5 +70,5 @@ class Mesh(object):
         self.mesh_arcs = MeshArcs()
 
     def __call__(self, topology, *args, **kwargs):
-        arcs = self.mesh_arcs(topology, *args)
-        return self.object(topology, arcs)
+        arcs = self.mesh_arcs(topology, *args, **kwargs)
+        return self.object(topology, arcs, *args, **kwargs)

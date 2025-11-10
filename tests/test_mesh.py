@@ -1,5 +1,5 @@
+from pathlib import Path
 import json
-import math
 import unittest
 
 from pytopojson import (
@@ -19,7 +19,7 @@ class MeshTestCase(unittest.TestCase):
         topology = {"type": "Topology", "objects": {}, "arcs": []}
 
         self.assertDictEqual(
-            self.mesh(topology, [{"type": None}]),
+            self.mesh(topology, {"type": None}),
             {"type": "MultiLineString", "coordinates": []},
         )
 
@@ -63,3 +63,17 @@ class MeshTestCase(unittest.TestCase):
             },
             self.mesh(topology, topology["objects"]["collection"]),
         )
+
+    def test_full_json_file_same_filter(self):
+        mesh_path = Path(__file__).resolve().parent / "client" / "mesh"
+        topology = json.loads((mesh_path / "states-10m.json").read_text())
+        actual_mesh = self.mesh(topology, topology["objects"]["states"], filt=lambda a, b: a != b)
+        expected_mesh = json.loads((mesh_path / "statemesh-10m.json").read_text())
+        self.assertDictEqual(actual_mesh, expected_mesh)
+
+    def test_full_json_file_no_filter(self):
+        mesh_path = Path(__file__).resolve().parent / "client" / "mesh"
+        topology = json.loads((mesh_path / "states-10m.json").read_text())
+        actual_mesh = self.mesh(topology, topology["objects"]["states"])
+        expected_mesh = json.loads((mesh_path / "statemesh-10m.json").read_text())
+        self.assertNotEqual(actual_mesh, expected_mesh)
